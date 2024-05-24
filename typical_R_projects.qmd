@@ -1,0 +1,3 @@
+---
+title: "Strengths and weaknesses of typical R project workflows"
+---

@@ -5,7 +5,7 @@ A half-day introduction to {targets}
 
 This workshop is for useRs interested in faster, smarter, and more reproducible
 data analysis project workflows. You will learn about the R package `{targets}`
-and why it is one of the most important tools for 'getting stuff done' with R,
+and why it is one of the most important tools for 'getting stuff done' with R
 since the `{tidyverse}`. The objective of this session is to jump start your
 `{targets}` knowledge, and walk through the process of refactoring an existing
 project to take advantage `{targets}`.

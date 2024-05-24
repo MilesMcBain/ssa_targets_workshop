@@ -1,0 +1,18 @@
+project:
+  type: website
+
+website:
+  title: "{targets} workshop"
+  sidebar:
+    style: "docked"
+    contents:
+      - index.qmd
+      - typical_R_projects.qmd
+      - pure_functions.qmd
+      - targets_plan.qmd
+      - long_vs_wide.qmd
+      - debugging.qmd
+      - branching.qmd
+      - getting_help.qmd
+      - more.qmd
+
