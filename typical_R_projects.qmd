@@ -1,3 +1,33 @@
 ---
 title: "Strengths and weaknesses of typical R project workflows"
+format:
+  html:
+    code-fold: true
 ---
+
+# Concept: Data Analysis Pipelines
+
+- Data goes in, answers, insights, all the magic comes out.
+- 'Pipeline' implies a process which is a kind of linear progression from inputs to outputs.
+- Contrast this with a process that looks more like a continuous loop, where the aim is to receive input data, react to it, and then rest waiting for the next piece of data.
+  - E.g. a software Application
+- The linear aspect is often reflected in how we structure our data analysis projects.
+
+# Concept: Reproducible Data Analysis
+
+# Reproducibility and Code
+
+- Code works in favour of reproducibility.
+  - It's not guaranteed, but well written code can produce a deterministic procedure for data analysis. Use the same dataset with the same code and you should reproduce the same answer.
+- In an ideal world every data analysis could be a single succinct script of beatifully aesthetic code, easily understood by humans and machines alike.
+  - In practice this is rarely possible due to certain forces. What are those forces?
+  <details>
+    <summary>Forces pulling apart that perfect script</summary>
+    - Domain mismatch: need write a lot of code
+    - External systems: need to tread lightly on them
+    - Expensive computations: repeatedly performing them is infeasible
+    - Division of labour
+    - (?)
+  </details>
+
+
