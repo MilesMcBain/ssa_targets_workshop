@@ -15,6 +15,24 @@ format:
 
 # Concept: Reproducible Data Analysis
 
+- The 'reproducibilty' that is connected to data analysis pipeline tools is not the 'replicability' from the replication crisis in science. But the two are connected.
+- We can 'reproduce':
+  - The same conclusion given the same input data, and following the same analaysis process.
+    - e.g. your colleague's work on your computer
+  - A valid analysis given different input data, and following the same analysis process.
+    - Conclusion might be different
+- What are the reasons we might want to do this?
+  <details>
+    <sumamary>Benefits of reproducibility?</summary>
+    - In order to answer questions about, or make extensions to an analysis in the future
+       - 'Boomerang effect'
+    - To be able to make realistic predictions about how long a data analysis will take
+    - To ensure consistent conclusions are reached to related questions
+      - Need consistent definitions for inputs and key metrics
+    - In a nutshell: Reliability, Consistency
+      - Without these you don't have a viable data analysis capability
+  </details>
+
 # Reproducibility and Code
 
 - Code works in favour of reproducibility.
@@ -30,4 +48,69 @@ format:
     - (?)
   </details>
 
+# Classic approaches to R projects
+
+## Script per pipeline 'stage'
+
+The most common approach to balancing reproducibility versus other concerns is
+to break the pipeline up into discrete scripts that map to stages in the linear
+pipeline. These stages might be conceived of as something like:
+
+1. Acquire data
+2. Wrangle data
+3. Explore data
+4. Model data
+5. Present findings
+
+With variations as required by context.
+
+A typical folder structure might look something like:
+
+```
+ .
+├── data
+│   ├── processed_data.Rds
+│   └── raw_data.csv
+├── doc
+│   └── report.Rmd
+├── outputs
+│   └── final_model.Rds
+├── R
+│   └── helpers.R
+├── README.md
+├── run.sh
+└── scripts
+    ├── 01_load_data.R
+    ├── 02_wrangle_data.R
+    ├── 03_exploratory_analysis.R
+    └── 04_model_data.R
+```
+
+There's a lot of variations on this idea. Using more folders seems popular.
+
+The key element is that the data analysis is broken down into a series of
+stages, each of which is captured by a single script file. Quite often these
+script files are numbered, with it to be implicitly understood that the the
+correct way to run the pipeline is to run the scripts in numerical order[^1].
+
+[^1]: Occassionally this presents refactoring challenges, where a new stage needs to
+be added late in development and the author might roll with a `02b_` to save
+updating too many paths.
+
+If the author is dilligent the `README.md` will contain information about how to
+run the pipeline, and may provide some kind of `run.R` or `run.sh` script which
+acts as the 'entry-point' for kicking off pipeline execution. This is intended
+to be the thing that you run to reproduce the author's results.
+
+This can be something of a trap because the author likely does not acually use the
+`run.sh` script as part of their workflow.
+  - Why would this be so?
+  <details>
+    <summary> reasons for not using the 'run everything' entry-point.</summary>
+    - It's too slow. Author can't iterate fast enough if they have to re-run all earlier stages just to make small tweaks to a later stage. E.g. playing with plot presentation.
+    - Author likely taking advantage of R's REPL for interactive development...
+  </details>
+
+
+## Rmd / Quarto Monolith
 
