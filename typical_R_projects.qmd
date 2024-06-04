@@ -107,10 +107,76 @@ This can be something of a trap because the author likely does not acually use t
   - Why would this be so?
   <details>
     <summary> reasons for not using the 'run everything' entry-point.</summary>
-    - It's too slow. Author can't iterate fast enough if they have to re-run all earlier stages just to make small tweaks to a later stage. E.g. playing with plot presentation.
-    - Author likely taking advantage of R's REPL for interactive development...
+    - Author likely taking advantage of R's REPL for interactive development. Relies on operating on incomplete pipeline state.
+    - Running whole pipeline is too slow. Author can't iterate fast enough if they have to re-run all earlier stages just to make small tweaks to a later stage. E.g. playing with plot presentation
+    - Running whole pipeline would have undesirable side-effects like pulling a large amount of data from an API.
   </details>
 
+So the workflow used in practice tends be some combination of:
+  - Interactively run numbered scripts up to the one you want to work on, then manully step through code to create the prerequisite state in the global environment.
+  - Shortcut the early stages of the pipeline by having them write intermediate output files that are read as inputs to later stages. Stages can be worked on independently.
+
+### When things go stale
+
+It's the real, yet informal, workflow that creates problems.
+
+If we used this project structure, and always ran the pipeline from start to
+finish, we would always know whether our code was in a state consistent with
+valid outputs [^2].
+
+If we work interactively, as we ineviably will[^3], we create opportunities for
+the pipeline's code and outputs (be they intermediate or final) to be in conflict.
+Here's a few a examples:
+
+  1. Changes are made to `02_wrangle_data.R` to support better modelling in
+  `04_model_data.R`. We were so keen to write about the improved results, we
+  forgot to re-run `03_exploratory_analysis.R` which also outputs some image files
+  that are used in the `report.Rmd`. When we render `reort.Rmd` it contains
+  images with data that was dropped before running the new model, and our boss
+  is confused as to why we didn't remove them yet. We look silly.
+
+  2. In the midst of running `04_model_data.R` interactively we forget that
+  creating a `|>` chain of `data.table` transformations can modify the head
+  dataset in-place. We tweak a chain before running it again leading to some
+  columns being transformed twice. When we run the modelling code to completion
+  we get some unexpectedly good results, and save that model for later use in
+  `report.Rmd`. We write the report out around these results, only to have
+  everything sour at the last minute when we try to run the entire pipeline as
+  one with `run.sh` and a completely different set of results appears.
+
+Both of these examples are different aspects of the same core problem. Working
+interactively with code that can accumulate data i.e. files on disk, data.frames
+in the global environment, rows in a database, etc. creates the opportunity for
+the code and the accumlated data to be in an inconsitent state. Sometimes this
+accumulated data is itself referred to as 'global state' or simply 'state', and
+people might say our problem was caused by 'stale state', that is: we are
+working with data that is no longer representative of what our program would
+output, if we ran it from scratch.
+
+### Cycles vs Lines
+
+- The project structure is strongly linear: Each script is assumed to be fully dependent on those prior, just as each line of code is on the one before.
+- Our work pattern is strongly cyclic as we iteratively refine our reasoning, statistical methods, data visualisations etc. This is involves making smaller targeted changes to code at all stages of the pipeline.
+
+There are forces that we have discussed that exert pressure to avoid running the pipeline in a linear fashion. This creates space for reproducibility issues.
+
+As we will see `{targets}` will remove the pressure to run the entire pipeline end to end, and allow us to work iteratively without the risk of reproducibility problems, perhaps faster than ever before.
+
+[^2]: Or would we? How do we decide what valid outputs are? More on this later.
+
+[^3]:Probably one of the reasons you're using R is the gloriously fluent
+conversations you can have with your data via the REPL. Working with rapid
+feedback when you need to simultaneously learn about data and program around it
+just feels way too good compared to the alternative where you have to wait for a
+heavy process to spool up and to run each time you have a simple question.
 
 ## Rmd / Quarto Monolith
+
+The idea of keeping code and output syncronised is often introduced to motivate
+the use of 'literate programming' tools like Rmarkdown or Quarto. They
+definitely have something to contribute here, but in practice do not scale well
+to large projects...
+
+
+
 
