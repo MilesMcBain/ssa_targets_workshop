@@ -23,7 +23,7 @@ format:
     - Conclusion might be different
 - What are the reasons we might want to do this?
   <details>
-    <sumamary>Benefits of reproducibility?</summary>
+    <summary>Benefits of reproducibility?</summary>
     - In order to answer questions about, or make extensions to an analysis in the future
        - 'Boomerang effect'
     - To be able to make realistic predictions about how long a data analysis will take
