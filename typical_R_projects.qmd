@@ -173,10 +173,30 @@ heavy process to spool up and to run each time you have a simple question.
 ## Rmd / Quarto Monolith
 
 The idea of keeping code and output syncronised is often introduced to motivate
-the use of 'literate programming' tools like Rmarkdown or Quarto. They
-definitely have something to contribute here, but in practice do not scale well
-to large projects...
+the use of _literate programming_ tools like Rmarkdown or Quarto. They
+definitely have something to contribute here, these tools work very well for
+educational material (like this workshop!), but the format does not scale well to large and complex data science projects.
 
+There are two main difficulties:
+
+1. Fumndamentally the format is geared toward producing a single output which is
+    a text of some kind. Complex data science projects often have a myriad of other
+    outputs including models, datasets, and other documents. Possibly having your
+    model run binned because `pandoc` baulked at your markdown syntax is not
+    sensible.
+
+    Rmarkdown and Quarto offer a caching feature to try to mitigate this but it
+    involves manual cache management, and does not give you control over
+    serialisation formats which mean certain objects will be unable to be
+    restored from cache correctly. It's up to you to discover which.
+
+2. In projects that involve complex data wrangling or modelling a tension can
+    develop between the text and the code, where the code needs to be complex, but
+    the text is pitched at a different (usually higher) conceptual level. The two fight for the narrative thread, and make for a disjointed / confusing reading experience. I call this _illiterate programming_.
+
+My advice is definitely do use Rmarkdown or Quarto, but avoid shoehorning an
+entire pipeline into the document. Have a pipeline produce the intermediate outputs
+separately which are then read into the document generation pipeline and given superficial coding treatment e.g. light wrangling into presentation layer plots or tables.
 
 
 
