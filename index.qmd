@@ -3,3 +3,22 @@ title: "{targets} workshop"
 author: Miles McBain
 ---
 
+# Introduction
+
+The objective of this workshop is to change the way you work with R. Rather than
+sacrificing the fluidity and immediacy of R's REPL-based programming in the name
+of 'Reproducibility', we will find there is a middle way that lets us have both.
+That way is the {targets} way.
+
+We start by setting some context:
+
+  - What brought you to this workshop?
+  - Have you had any experience with {targets}?
+  - What problems do you have that you hope {targets} can solve?
+  - Do you anticipate any barriers to moving forward with {targets} in your workplace?
+
+# Overview of the workshop
+
+  - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from targets is surprisingly small.
+  - We'll spend time up front understanding the core problems targets solves. This will help us articulate the value to our teams.
+  - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern targets pipeline. This will let us see the benefits accumulate, as we deploy more and more techniques.

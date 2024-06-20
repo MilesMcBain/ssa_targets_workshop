@@ -1,0 +1,6 @@
+
+# Shaping computations
+
+- parallelism
+- memory managment options
+  - unload all targets after use or keep in memory

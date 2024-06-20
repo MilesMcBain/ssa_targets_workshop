@@ -58,7 +58,7 @@ pipeline. These stages might be conceived of as something like:
 
 1. Acquire data
 2. Wrangle data
-3. Explore data
+3. Visualise data
 4. Model data
 5. Present findings
 
@@ -72,8 +72,10 @@ A typical folder structure might look something like:
 │   ├── processed_data.Rds
 │   └── raw_data.csv
 ├── doc
-│   └── report.Rmd
-├── outputs
+│   ├── exploratory_analysis.Rmd
+│   └── report.Rmd
+├── output
+│   ├── insightful_plot.png
 │   └── final_model.Rds
 ├── R
 │   └── helpers.R
@@ -82,11 +84,15 @@ A typical folder structure might look something like:
 └── scripts
     ├── 01_load_data.R
     ├── 02_wrangle_data.R
-    ├── 03_exploratory_analysis.R
-    └── 04_model_data.R
+    ├── 03_visualise_data.R
+    ├── 04_model_data.R
+    └── 05_render_report.R
+
 ```
 
-There's a lot of variations on this idea. Using more folders seems popular.
+There's a lot of variations on this idea. There might be multiple scripts per
+phase here, e.g. one per plot (figure)03_visualise_data.R, or one per model.
+Using more folders seems popular.
 
 The key element is that the data analysis is broken down into a series of
 stages, each of which is captured by a single script file. Quite often these
@@ -130,7 +136,7 @@ Here's a few a examples:
 
   1. Changes are made to `02_wrangle_data.R` to support better modeling in
   `04_model_data.R`. We were so keen to write about the improved results, we
-  forgot to re-run `03_exploratory_analysis.R` which also outputs some image files
+  forgot to re-run `03_visualise_data.R` which also outputs some image files
   that are used in the `report.Rmd`. When we render `report.Rmd` it contains
   images with data that was dropped before running the new model, and our boss
   is confused as to why we didn't remove them yet. We look silly.
@@ -158,9 +164,12 @@ output, if we ran it from scratch.
 - The project structure is strongly linear: Each script is assumed to be fully dependent on those prior, just as each line of code is on the one before.
 - Our work pattern is strongly cyclic as we iteratively refine our reasoning, statistical methods, data visualisations etc. This is involves making smaller targeted changes to code at all stages of the pipeline.
 
-There are forces that we have discussed that exert pressure to avoid running the pipeline in a linear fashion. This creates space for reproducibility issues.
+There are forces that we have discussed that exert pressure to avoid running the pipeline in a linear fashion. This creates space for issues:
 
-As we will see `{targets}` will remove the pressure to run the entire pipeline end to end, and allow us to work iteratively without the risk of reproducibility problems, perhaps faster than ever before.
+  - The pipeline either fails to run, or gives unexpected results when finally run in a complete pass. Reproducibility fail.
+  - Concepts drift between script files as they are worked on piecemeal. E.g. the same dataset is loaded in multiple script files but referred to by different names. Coherency fail.
+
+As we will see `{targets}` will remove the pressure to run the entire pipeline end to end, and allow us to work iteratively without the risk of these problems, perhaps faster than ever before.
 
 [^2]: Or would we? How do we decide what valid outputs are? More on this later.
 
@@ -198,5 +207,14 @@ My advice is definitely do use Rmarkdown or Quarto, but avoid shoehorning an
 entire pipeline into the document. Have a pipeline produce the intermediate outputs
 separately which are then read into the document generation pipeline and given superficial coding treatment e.g. light wrangling into presentation layer plots or tables.
 
+# Introducing our project V1: 'Classic R Project'
 
+In this workshop we're going to refactor [this project](https://github.com/MilesMcBain/classic_r_project) into a targets pipeline.
+
+- Take a few minutes to poke around
+- Read script 01 and 02.
+  - Is it clear why things in 02 are the way they are?
+    - E.g. Why do we do that H3 hex index thing?
+    - Has anyone looked at real estate recently. Which gives you more context: clicking through all the beautiful images, or one look at the floor plan?
+    - Or imagine reading a text book that had no table of contents?
 

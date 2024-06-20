@@ -47,6 +47,7 @@ install.packages(c("targets", "tarchetypes", "tidyverse", "conflicted", "galah",
 ```
 
 If you're a Linux user `sf` might give you some challenges (but you're used to that, right?). Be sure to study their README.
+  - likewise for `V8` dep of `h3jsr`, see static lib option for linux.
 
 3. Our example project is going to pull data from the _Atlas of Living Australia_, so create an account with a valid email address, here:
 https://auth.ala.org.au/userdetails/registration/createAccount

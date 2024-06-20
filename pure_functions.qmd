@@ -1,0 +1,20 @@
+- Functions underpin targets
+  - Even if you don't use targets your workflows can probably benefit from using more functions
+
+- Think about the worst code you've ever had to debug. What were it's features? What made debugging it hard?
+
+ - Functions as communication tools
+   - If you've had to reread a piece of code three times, put in in a function
+   - They provide a navigable hyperlinked structure
+ - Functions as containment lines for code
+ - The common 'if you've had to resue the same code three times make a function' mantra drastically undersells their power.
+
+- How to size a function as a unit of work?
+  - Code size: Not that much more than a screenful of code
+  - Complexity: It's like a paragraph or a subheading. One Main idea.
+  - Ideally one kind of output
+    - A list of things of the same class is quite normal.
+    - Multiple distinct results is possible e.g. with a list.
+      - Potentially a code smell that your function is doing too much.
+      - Sometimes a result can be opportunistically efficiently calculated as part of something else... fair enough.
+
