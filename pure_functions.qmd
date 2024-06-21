@@ -118,6 +118,7 @@ Follow my lead and we'll do our first refactor in preparation for targets to [ou
 ### Refactoring Steps
 
 1. Move config and library calls into run.R
+  - All the subsequently created functions are going to be called and wired together in run.R
 2. Wrap up 01_ into a function that fetches data
 3. Wrap up 02_ into a funciton that wrangles data
 4. Split up 03_ into a function for each plot
@@ -132,3 +133,6 @@ Follow my lead and we'll do our first refactor in preparation for targets to [ou
   - These are already in the global envirnonment and so can be seen by knitr / rmarkdown during render.
 
 The completed refactor is on the [`refactor1` branch of our project](https://github.com/MilesMcBain/classic_r_project/tree/refactor1)
+
+In particular pay attention to `run.R`.
+  - Notice how it is far easier to get a handle on what information our project depends on and where that is used?
