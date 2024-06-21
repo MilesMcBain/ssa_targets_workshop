@@ -1,6 +1,10 @@
 
 # Shaping computations
 
-- parallelism
-- memory managment options
-  - unload all targets after use or keep in memory
+- Great magic happens here
+  - If you get an Out of Memory on one branch you don't lose all your hours long data processing of completed branches.
+    - Process can be resumed with increased memory (e.g. if in cloud), or decreased number of parallel threads.
+- You get fine great control of CPU and memory usage:
+  - many parallel back ends
+  - memory managment options
+    - unload all targets after use or keep in memory

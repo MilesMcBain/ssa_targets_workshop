@@ -211,10 +211,13 @@ separately which are then read into the document generation pipeline and given s
 
 In this workshop we're going to refactor [this project](https://github.com/MilesMcBain/classic_r_project) into a targets pipeline.
 
+Nominally the project is about fetching some species distribution data from an API, merging that with some weather data, training a species classification model, and producing a report.
+
 - Take a few minutes to poke around
 - Read script 01 and 02.
   - Is it clear why things in 02 are the way they are?
-    - E.g. Why do we do that H3 hex index thing?
+    - Is it clear why we do that H3 hex index thing?
     - Has anyone looked at real estate recently. Which gives you more context: clicking through all the beautiful images, or one look at the floor plan?
     - Or imagine reading a text book that had no table of contents?
+
 
