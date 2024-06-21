@@ -114,3 +114,19 @@ The first step in refactoring our classic workflow into targets is to refactor `
 ## Let's do this
 
 Follow my lead and we'll do our first refactor in preparation for targes to [our project](https://github.com/milesmcbain/classic_r_project).
+
+### Refactoring Steps
+
+1. Move config and library calls into run.R
+2. Wrap up 01_ into a function that fetches data
+3. Wrap up 02_ into a funciton that wrangles data
+4. Split up 03_ into a function for each plot
+5. Split up 04_ into:
+  - function the creates the training data
+  - function that creates test train splits
+  - function that does the model parameter grid search
+  - function that fits final model
+  - function that creates validation data from final model and test set
+6. Split 05_ into one function for each plot
+7. Swap out all the images used in the Rmd for plot objects.
+  - These are already in the global envirnonment and so can be seen by knitr / rmarkdown during render.
