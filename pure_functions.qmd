@@ -130,3 +130,5 @@ Follow my lead and we'll do our first refactor in preparation for targes to [our
 6. Split 05_ into one function for each plot
 7. Swap out all the images used in the Rmd for plot objects.
   - These are already in the global envirnonment and so can be seen by knitr / rmarkdown during render.
+
+The completed refactor is on the [`refactor1` branch of our project](https://github.com/MilesMcBain/classic_r_project/tree/refactor1)
