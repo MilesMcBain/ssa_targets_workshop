@@ -92,12 +92,12 @@ By connecting target nodes via their input and output edges targets can determin
   - It can determine nodes graph that do not share common dependencies. These targets can be computed in parallel to speed up the overall plan execution.
 
 
-# Refactoring the classic workflow to pure function
+# Refactoring the classic workflow to pure functions
 
 The first step in refactoring our classic workflow into targets is to refactor `run.R` into a series of function calls to pure functions. We'll then convert this into a targets 'plan'.
 
   - There's actually surprisingly little work to get a targets pipeline running!
-  - Initially our functions will be too big and to too much.
+  - Initially our functions will be too big and do too much.
   - Most of the work will be refactoring to make better use of targets features.
 
 ## But how do design functions?
