@@ -113,7 +113,7 @@ The first step in refactoring our classic workflow into targets is to refactor `
 
 ## Let's do this
 
-Follow my lead and we'll do our first refactor in preparation for targes to [our project](https://github.com/milesmcbain/classic_r_project).
+Follow my lead and we'll do our first refactor in preparation for targets to [our project](https://github.com/milesmcbain/classic_r_project).
 
 ### Refactoring Steps
 
