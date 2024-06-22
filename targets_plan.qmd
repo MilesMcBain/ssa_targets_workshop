@@ -1,3 +1,51 @@
 # The targets plan
 
-As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in coverting to targets.
+As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in coverting a pipeline to targets. The `run.R` we built already looks a lot like a targets 'plan'.
+
+It's time we actually defined what a targets plan is. This can be a little confusing because there are two things that users might refer to as the 'plan':
+
+1. A script file, by convention called `_targets.R`, that sits in the root folder of the project.
+  - Sets up environment for the projet's targets. Loads packages, sources script files containing functions to be called. Sets global state: options, evironement variables etc.
+  - Returns, as its last object, a list of target objects.
+2. The list of target objects itself. This data structure is what is analysed to determine the dependcy structure of the pipeline graph.
+
+So in classic R fashion, the definition of the computational graph is itself a
+data structure which can be manipulated to great metaprogramming effect. For
+example we can have targets that appear in the `_targets.R` as a single
+computational node, but are actually expanded out into several targets in the
+final returned object.[^1]
+
+[^1]: More concretely: We could have a 'model fit' target that decomposes into two separate targets for the model and performance statistics. We could use an argument to change the assessment criteria without rebuilding the model. Don't worry if that idn't make sense yet.
+
+# Let's create a plan
+
+Let's jump into refactoring our `run.R` into a targets plan.
+
+## Refactoring steps
+
+1. rename `run.R` to `_targets.R`
+1. add `library(targets)` to libraries
+2. replace `set.seed(2048)` with
+2. Refactor each object binding like:
+
+```{r}
+object_name <- function_call(arg1, arg2, arg3)
+```
+
+to:
+
+```{r}
+tar_target(
+  object_name,
+  function_call(
+    arg1,
+    arg2,
+    arg3
+  )
+),
+```
+
+2. Wrap all the output bindings and their function calls in a `list()`
+  - make sure there's a comma separating each
+
+# 'Making a plan'
