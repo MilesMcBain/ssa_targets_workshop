@@ -1,1 +1,3 @@
-  - can look at intermediate results
+# The targets plan
+
+As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in coverting to targets.
