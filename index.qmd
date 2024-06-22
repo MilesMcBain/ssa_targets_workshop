@@ -17,6 +17,14 @@ We start by setting some context:
   - What problems do you have that you hope {targets} can solve?
   - Do you anticipate any barriers to moving forward with {targets} in your workplace?
 
+# What is Targets?
+
+Targets is a framemork for building data science pipelines with R. It is part of a growing niche of 'data orchestration' tools that conceive of data processing pipelines as graph structures. What sets targets apart from the rest is its incredible ergonomics, facilitated by features of the R programming language.
+
+You can view targets as a replacement for the classic `make` tool, which is a famed computation time saver in software development. Make's most important feature is that it can detect outputs (or 'targets') of a software build that have not changed since the previous build, and so can re-use them. This greatly accelerates the development / test cycle by minimising compilation time.
+
+Targets shares this feature, but it goes far beyond this, giving the user the ability shape the computational structure of the pipeline so that it can be run optimally within the bounds of resource constraints. Importantly for Data Science, its features also defeat classes of bugs that affect project reproducibility.
+
 # Overview of the workshop
 
   - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from targets is surprisingly small.
