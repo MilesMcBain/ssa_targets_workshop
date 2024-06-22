@@ -136,3 +136,8 @@ The completed refactor is on the [`refactor1` branch of our project](https://git
 
 In particular pay attention to `run.R`.
   - Notice how it is far easier to get a handle on what information our project depends on and where that is used?
+
+### Workflow tips
+
+- [`{fnmate}`](https://github.com/milesmcbain/fnmate) for creating a function defintion from an example call.
+- 'Jump to definition' for jumping to the body of a function from a call site.
