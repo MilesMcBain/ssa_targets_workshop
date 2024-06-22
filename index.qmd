@@ -23,7 +23,7 @@ Targets is a framemork for building data science pipelines with R. It is part of
 
 You can view targets as a replacement for the classic `make` tool, which is a famed computation time saver in software development. Make's most important feature is that it can detect outputs (or 'targets') of a software build that have not changed since the previous build, and so can re-use them. This greatly accelerates the development / test cycle by minimising compilation time.
 
-Targets shares this feature, but it goes far beyond this, giving the user the ability shape the computational structure of the pipeline so that it can be run optimally within the bounds of resource constraints. Importantly for Data Science, its features also defeat classes of bugs that affect project reproducibility.
+Targets shares this feature, but it goes far beyond this, giving the user the ability shape the computational structure of the pipeline so that it can be run optimally within the bounds of resource constraints. Importantly for data science, its features also defeat classes of bugs that affect project reproducibility.
 
 # Overview of the workshop
 
