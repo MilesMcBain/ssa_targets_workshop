@@ -19,14 +19,29 @@ We start by setting some context:
 
 # What is Targets?
 
-Targets is a framemork for building data science pipelines with R. It is part of a growing niche of 'data orchestration' tools that conceive of data processing pipelines as graph structures. What sets targets apart from the rest is its incredible ergonomics, facilitated by features of the R programming language.
+Targets is a framemork for building data science pipelines with R. It is part of
+a growing niche of 'data orchestration' tools that conceive of data processing
+pipelines as graph structures. What sets targets apart from the rest is its
+incredible ergonomics, facilitated by features of the R programming language.
 
-You can view targets as a replacement for the classic `make` tool, which is a famed computation time saver in software development. Make's most important feature is that it can detect outputs (or 'targets') of a software build that have not changed since the previous build, and so can re-use them. This greatly accelerates the development / test cycle by minimising compilation time.
+You can view targets as a replacement for the classic `make` tool, which is a
+famed computation time saver in software development. Make's most important
+feature is that it can detect outputs (or 'targets') of a software build that
+have not changed since the previous build, and so can re-use them. This greatly
+accelerates the development / test cycle by minimising compilation time.
 
-Targets shares this feature, but it goes far beyond this, giving the user the ability shape the computational structure of the pipeline so that it can be run optimally within the bounds of resource constraints. Importantly for data science, its features also defeat classes of bugs that affect project reproducibility.
+Targets shares this feature, but it goes far beyond this, giving the user the
+ability shape the computational structure of the pipeline so that it can be run
+optimally within the bounds of resource constraints. Importantly for data
+science, its features also defeat classes of bugs that affect project
+reproducibility.
+
+In practice the value targets delivers as seen by teams is around:
+
+  - Increasing the speed of iteration on data science methodology.
+  - Inducing a structure which makes projects more comprehensible, and more easily peer-reviwed.
 
 # Overview of the workshop
-
   - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from targets is surprisingly small.
   - We'll spend time up front understanding the core problems targets solves. This will help us articulate the value to our teams.
   - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern targets pipeline. This will let us see the benefits accumulate, as we deploy more and more techniques.
