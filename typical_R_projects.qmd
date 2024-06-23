@@ -209,7 +209,7 @@ separately which are then read into the document generation pipeline and given s
 
 # Introducing our project V1: 'Classic R Project'
 
-In this workshop we're going to refactor [this project](https://github.com/MilesMcBain/classic_r_project) into a targets pipeline.
+In this workshop we're going to refactor [this project](https://github.com/MilesMcBain/classic_r_project) into a {targets} pipeline.
 
 Nominally the project is about fetching some species distribution data from an API, merging that with some weather data, training a species classification model, and producing a report.
 

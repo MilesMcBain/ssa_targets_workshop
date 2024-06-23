@@ -1,11 +1,11 @@
-# The targets plan
+# The {targets} plan
 
-As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in coverting a pipeline to targets. The `run.R` we built already looks a lot like a targets 'plan'.
+As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in coverting a pipeline to use {targets}. The `run.R` we built already looks a lot like a {targets} 'plan'.
 
-It's time we actually defined what a targets plan is. This can be a little confusing because there are two things that users might refer to as the 'plan':
+It's time we actually defined what a {targets} plan is. This can be a little confusing because there are two things that users might refer to as the 'plan':
 
 1. A script file, by convention called `_targets.R`, that sits in the root folder of the project.
-  - Sets up environment for the projet's targets. Loads packages, sources script files containing functions to be called. Sets global state: options, evironement variables etc.
+  - Sets up environment for the project's targets. Loads packages, sources script files containing functions to be called. Sets global state: options, evironement variables etc.
   - Returns, as its last object, a list of target objects.
 2. The list of target objects itself. This data structure is what is analysed to determine the dependcy structure of the pipeline graph.
 
@@ -17,24 +17,41 @@ final returned object.[^1]
 
 [^1]: More concretely: We could have a 'model fit' target that decomposes into two separate targets for the model and performance statistics. We could use an argument to change the assessment criteria without rebuilding the model. Don't worry if that idn't make sense yet.
 
+In this workshop we'll refer to the `_targets.R` file as the plan.
+
 # Let's create a plan
 
-Let's jump into refactoring our `run.R` into a targets plan.
+Let's jump into refactoring our `run.R` into a {targets} plan.
 
 ## Refactoring steps
 
 1. rename `run.R` to `_targets.R`
-1. add `library(targets)` to libraries
-2. replace `set.seed(2048)` with
-2. Refactor each object binding like:
+2. add `library(targets)` and `library(tarcheypes)` to libraries
+  - `{tarchetypes}` is discussed in the next section
+3. replace `set.seed(2048)` with `tar_option_set(seed = 2048)`
+4. Refactor paths bindings of data files like:
 
 ```{r}
+#| eval: false
+weather_data_path <- "data/brisbane_weather.csv"
+```
+
+```{r}
+#| eval: false
+tar_file(weather_data_path, "data/brisbane_weather.csv")
+```
+
+5. Refactor each object binding like:
+
+```{r}
+#| eval: false
 object_name <- function_call(arg1, arg2, arg3)
 ```
 
 to:
 
 ```{r}
+#| eval: false
 tar_target(
   object_name,
   function_call(
@@ -45,7 +62,213 @@ tar_target(
 ),
 ```
 
-2. Wrap all the output bindings and their function calls in a `list()`
+6. Wrap all the output bindings and their function calls in a `list()`
   - make sure there's a comma separating each
 
+7. Replace `render("docs/report.Rmd")` with
+
+```{r}
+#| eval: false
+tar_render(report, "docs/report.Rmd")
+```
+
+8. Wrap each pipeline output in the report in `tar_read()`, e.g.:
+```{r}
+tar_read(gg_species_distribution_points)
+```
+
+9. Replace the code to source all files in the R folder with `tar_source()`
+
+Now we have a {targets} plan!
+
+The completed refactor is available on the ['refactor2' branch of the R project](https://github.com/MilesMcBain/classic_r_project/tree/refactor2).
+
+# {tarchetypes} and the Targetopia
+
+[`{tarchtypes}`](https://github.com/ropensci/tarchetypes) is an addon package to
+`{targets}` also authored by Will Landau. It contains helpful additions that
+make expressing {targets} plans simpler and cleaner. It is part of the
+['Targetopia'](https://wlandau.github.io/targetopia/packages.html) family of extensions
+for targets.
+
+{targets} has been designed to allow users to create their own domain specific extensions, for example see [`{geotargets}`](https://github.com/njtierney/geotargets).
+
+In this refactor we use several `{tarchetypes}` functions:
+
+  - `tar_file()` is a compact way to declare both input and output file targets.
+    - These files will trigger targets that depend on them to be rebuilt if they change.
+  - `tar_render()` is a way to declare an RMarkdown report target (Yes, there is a Quarto variant).
+    - The R code in the report is analysed to discover dependencies on other targets.
+
 # 'Making a plan'
+
+Assuming:
+
+  - Our R session working directory is the to the project root, where `_targets.R` is
+  - We have the `{targets}` package loaded in our R session
+
+We can build all targets in the plan by calling `tar_make()`
+
+If we do that now we should see a stream of messages appear in our R terminal like:
+
+```
+...
+● completed target species_classification_model_training_summary [53.591 seconds]
+▶ dispatched target species_classification_model
+● completed target species_classification_model [3.06 seconds]
+▶ dispatched target species_model_validation_data
+● completed target species_model_validation_data [0.253 seconds]
+▶ dispatched target base_plot_model_roc_object
+Setting levels: control = FALSE, case = TRUE
+Setting direction: controls < cases
+● completed target base_plot_model_roc_object [0.005 seconds]
+▶ dispatched target gg_species_class_accuracy_hexes
+● completed target gg_species_class_accuracy_hexes [0.136 seconds]
+▶ dispatched target report
+● completed target report [4.148 seconds]
+▶ ended pipeline [1.095 minutes]
+```
+
+Immediately calling `tar_make()` again should show something different:
+
+```
+✔ skipped target species_classification_model_training_summary
+✔ skipped target species_classification_model
+✔ skipped target species_model_validation_data
+✔ skipped target base_plot_model_roc_object
+✔ skipped target gg_species_class_accuracy_hexes
+✔ skipped target report
+✔ skipped pipeline [0.173 seconds]
+```
+
+By default the plan is built in a separate R session! So only state created by running `_targets.R` is used. This avoids a whole class of bugs that arise due to running code interactively against stale state in the global environment.
+
+# The Store
+
+When we ran the plan for the second time all our targets were 'skipped' because
+the {targets} framework determined it already had the output for them,
+since nothing had changed since first time we ran the plan.
+
+The built version of every target in the plan is stored in a place referred to
+as the store. By defeault the store lives inside the `_targets` folder which
+{targets} creates the first time we call `tar_make()`, and then refers to on every
+subequent run.
+
+For our project, that folder looks like this now:
+
+```
+_targets
+├── meta
+│   ├── meta
+│   ├── process
+│   └── progress
+├── objects
+│   ├── base_plot_model_roc_object
+│   ├── brisbane_river
+│   ├── gg_species_class_accuracy_hexes
+│   ├── gg_species_distribution_hexes
+│   ├── gg_species_distribution_months
+│   ├── gg_species_distribution_points
+│   ├── occurrences
+│   ├── occurrences_training_data
+│   ├── occurrences_weather_hexes
+│   ├── species_classification_model
+│   ├── species_classification_model_training_summary
+│   ├── species_model_validation_data
+│   ├── study_species
+│   └── test_train_split
+└── user
+```
+
+`_targets/objects` contains the R objects returned from the functions that ran for each target. Each object is serialised to a file in Rds format, and labelled with the associated target's name. The file format is configurable with the the `format` option of `tar_target()`. There are also format helpers available like `tarchetypes::tar_parquet`, which defines a target that will be serialised to parquet format.
+
+There are some targets that are not present. File targets are stored only in the metadata.
+
+We can get some interesting information from the metadata with `tar_meta()`:
+
+```{r}
+#| eval: false
+tar_meta() |>
+  arrange(-seconds) |>
+  select(name, format, seconds, bytes, warnings, error) |>
+  head() |>
+  knitr::kable()
+```
+
+|name                                          |format | seconds|   bytes|warnings |error |
+|:---------------------------------------------|:------|-------:|-------:|:--------|:-----|
+|species_classification_model_training_summary |rds    |  54.934|     395|NA       |NA    |
+|occurrences                                   |rds    |   9.832|  326259|NA       |NA    |
+|report                                        |file   |   4.148| 1950959|NA       |NA    |
+|species_classification_model                  |rds    |   2.967| 7969385|NA       |NA    |
+|occurrences_weather_hexes                     |rds    |   0.488|  511859|NA       |NA    |
+|study_species                                 |rds    |   0.347|     555|NA       |NA    |
+
+Targets can be read from the store like:
+
+```{r}
+ species_classification_model_training_summarys <-
+   tar_read(species_classification_model_training_summarys) # returns value
+tar_load(species_classification_model_training_summarys) # adds to global environment
+```
+  - This is very useful to inspect intermediate targets to do further development with, or debug the plan.
+
+# Finer points
+
+## Packages
+
+The global environment established by the `_targets.R` is used to evaluate all targets. This includes loaded packages. In the case of parallelism, as we will see later, the environment is replicated.
+
+Aside from the traditional `library()` method, there is another way to declare
+packages, per target, using the `packages` argument. In this case the packages
+are loaded right before the target is built, or it's built object is used in a
+downstream target. This may be situationally convenient, but because targets
+that do not share a dependency relationship can be run in any order, this means
+that packages can be loaded in any order, which could have unexpected
+consequences. I would suggest avoiding this.
+
+Many examples you see will set packages globally in `_targets.R` using
+`tar_option_set(packages = )` this conveys no advantage over the `library()`
+method, and has one significant drawback in that `renv` will not detect these
+packages automatically as project dependencies.
+
+My recommendation is to stick with `library()`
+
+There is one other option related to packages which is important.
+`tar_option_set(imports = )` defines a set of packages whose functions and objects are to be
+watched for changes. If the package is updated it will cause dependent targets
+that use updated functions or objects to be rebuilt.
+
+You probably don't want to put every package in here
+  - scanning through large amounts of code slows things down
+  - packages that updated regularly could trigger too much churn in your pipeline
+  - your internal packages or quite unstable packages are probably good candidates.
+
+## Constants
+
+At the moment we have a objects declared outside the plan. E.g. `study_date <-
+ymd("2024-05-08")`. These are still watched for changes, but they are not
+targets. Their value is not available from the store. My advice is that it makes
+for a slightly better interactive development and debugging workflows to have
+them in the list of targets objects, so they become fully fledged targets, and
+available from the store.
+
+`tarchetypes::tar_plan` is a replacement for `list()`allows targets to be written in the list like:
+
+```{r}
+#| eval: false
+tar_plan(
+  study_date = ymd("2024-05-08"),
+  tar_target(
+    study_species,
+    search_taxa(c("Threskiornis molucca", "Threskiornis spinicollis"))
+  )
+)
+```
+
+# Interactive development workflow
+
+- loading targets
+- function(){}
+
+# The two kinds of reproducibility

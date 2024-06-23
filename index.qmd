@@ -17,35 +17,39 @@ We start by setting some context:
   - What problems do you have that you hope {targets} can solve?
   - Do you anticipate any barriers to moving forward with {targets} in your workplace?
 
-# What is Targets?
+# What is {targets}?
 
-Targets is a framemork created by [Will Landau](https://github.com/wlandau) for
+{targets} is a framemork created by [Will Landau](https://github.com/wlandau) for
 building data science pipelines with R. It is part of a growing niche of 'data
 orchestration' tools that conceive of data processing pipelines as graph
-structures. What sets targets apart from the rest is its incredible ergonomics
+structures. What sets {targets} apart from the rest is its incredible ergonomics
 and extensibility facilitated by features of the R programming language.
 
-You can view targets as a replacement for the classic `make` tool, which is a
+You can view {targets} as a replacement for the classic `make` tool, which is a
 famed computation time saver in software development. Make's most important
 feature is that it can detect outputs (or 'targets') of a software build that
 have not changed since the previous build, and so can re-use them. This greatly
 accelerates the development / test cycle by minimising compilation time.
 
-Targets shares this feature, but it goes far beyond this, giving the user the
+{targets} shares this feature, but it goes far beyond this, giving the user the
 ability shape the computational structure of the pipeline so that it can be run
 optimally within the bounds of resource constraints. Importantly for data
 science, its features also defeat classes of bugs that affect project
 reproducibility.
 
-In practice the value targets delivers as seen by teams is around:
+In practice the value {targets} delivers as seen by teams is around:
 
   - Increasing the speed of iteration on data science methodology.
   - Inducing a structure which makes projects more comprehensible, and more easily peer-reviwed.
 
-The targets R package has cleared the high bar set by the [rOpenSci peer review process](https://github.com/ropensci/software-review/issues/401) peer review process, and has been accepted on CRAN.
+The {targets} R package has cleared the high bar set by the [rOpenSci peer review process](https://github.com/ropensci/software-review/issues/401) peer review process, and has been accepted on CRAN.
 
 # Overview of the workshop
 
-  - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from targets is surprisingly small.
-  - We'll spend time up front understanding the core problems targets solves. This will help us articulate the value to our teams.
-  - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern targets pipeline. This will let us see the benefits accumulate, as we deploy more advanced techniques.
+  - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from `{targets}` is surprisingly small.
+  - We'll spend time up front understanding the core problems {targets} solves. This will help us articulate the value to our teams.
+  - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern {targets} pipeline. This will let us see the benefits accumulate, as we deploy more advanced techniques.
+
+# Notation
+
+In this workshop material `{targets}` is used to refer to the R package, while target or targets (no braces) refers to a node in the pipeline graph. We say targets are 'built' to refer to executing the code associated with a target to generate its value. The value of target can be any R object. This is a notable differnce to make, where targets are files.
