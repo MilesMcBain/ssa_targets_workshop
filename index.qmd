@@ -22,8 +22,8 @@ We start by setting some context:
 Targets is a framemork created by [Will Landau](https://github.com/wlandau) for
 building data science pipelines with R. It is part of a growing niche of 'data
 orchestration' tools that conceive of data processing pipelines as graph
-structures. What sets targets apart from the rest is its incredible ergonomics,
-facilitated by features of the R programming language.
+structures. What sets targets apart from the rest is its incredible ergonomics
+and extensibility facilitated by features of the R programming language.
 
 You can view targets as a replacement for the classic `make` tool, which is a
 famed computation time saver in software development. Make's most important
@@ -48,4 +48,4 @@ The targets R package has cleared the high bar set by the [rOpenSci peer review 
 
   - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from targets is surprisingly small.
   - We'll spend time up front understanding the core problems targets solves. This will help us articulate the value to our teams.
-  - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern targets pipeline. This will let us see the benefits accumulate, as we deploy more and more techniques.
+  - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern targets pipeline. This will let us see the benefits accumulate, as we deploy more advanced techniques.
