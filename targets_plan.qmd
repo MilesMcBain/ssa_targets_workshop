@@ -213,6 +213,28 @@ tar_load(species_classification_model_training_summarys) # adds to global enviro
 ```
   - This is very useful to inspect intermediate targets to do further development with, or debug the plan.
 
+# Cleaning the store
+
+- Running `tar_invalidate(occurences)` means the next time the plan is run `occurrences` will be rebuilt, which MAY trigger downstream targets to be rebuilt, but not necissarily if targets identifies the value hasn't changed. The stored value and metadata is retained.
+- `tar_delete()` removes targets from the store. It supports 'tidyselect' style name matching.
+  - `tar_delete(everything())` wipes the whole store.
+- `tar_prune()` removes historical targets from the store that are no longer in the plan.
+  - Useful if you accidentally get a typo'd version of target in your store and keep loading it by accident.
+
+# Plan visualisation
+
+The graph of targets defined in the plan can be visualised with either
+  - `tar_visnetwork()`
+  - `tar_gimpse()` - doesn't show information about which targets are up to date
+
+e.g.
+
+[The result of tar_visnetwork() on our project.](images/targets_visnetwork2.png)
+
+These get messy fast, but one useful aspect is targets that align vertically are
+not dependent on eachother, so it can help you understand the scope for
+parallelisation to speed up running the plan.
+
 # Finer points
 
 ## Packages
@@ -266,9 +288,56 @@ tar_plan(
 )
 ```
 
+## File targets
+
+It can be confusing that both input files and output files are declared the same way.
+
+  - If you have a file input, and you need targets that depend on the file to be rebuilt if the file changes, use `tar_file()` in your plan.
+  - If you have a target that writes a file, and you want that target to be rebuilt (and file rewritten), if the file is removed, use `tar_file()` in your plan.
+
+  Just remember `tar_file()` for files!
+
 # Interactive development workflow
 
-- loading targets
-- function(){}
+Here I'll give you a quick demo of how you proceed with development.
+
+The main elements are:
+
+  1. Load the targets you want to work with interactively from the targets store with `tar_load()`
+    - There is an RStuido Addin that ships with targets that can load the target under the cursor from the store. It is highly recommended that you make a keyboard shortut for this. See [creating a keyboard shortcuts for RStudio addins](https://docs.posit.co/ide/user/ide/guide/productivity/add-ins.html#keyboard-shortcuts)
+  2. Create a new function to be home to your work.
+    - Don't forget about `{fnmate}`!
+  3. Once your function seems like it will work, immediately run `tar_make()` - I also highly advise making a keyboard shortcut for this.
+  4. Repeat.
+
+Sometimes people ask about where to put experimental code they're not sure should be in the plan yet. At the bottom of a file I'm working with I sometimes keep a 'scratchpad' of related code inside a block like:
+
+```{r}
+#| eval: false
+function(){
+  # experimental code goes here
+}
+```
+
+The code is not run when running the plan and since the function has no name, it
+cannot be accidentally called. This tip came from Gábor Csárdi.
+
+# Review
+
+What does each of these functions do?
+
+  - `tar_make()`
+  - `tar_load()`
+  - `tar_meta()`
+  - `tar_invalidate()`
+  - `tar_delete()`
+  - `tar_target()`
+  - `tar_file()`
+  - `tar_render()`
+
+What must be the last object returned in the `_targets.R`?
+
+If you can answer those, you now have enough tools to use targets productively on
+your projects. The cake is baked. It's all icing from here.
 
 # The two kinds of reproducibility
