@@ -207,6 +207,7 @@ tar_meta() |>
 Targets can be read from the store like:
 
 ```{r}
+#| eval: false
  species_classification_model_training_summarys <-
    tar_read(species_classification_model_training_summarys) # returns value
 tar_load(species_classification_model_training_summarys) # adds to global environment
@@ -268,8 +269,8 @@ You probably don't want to put every package in here
 
 ## Constants
 
-At the moment we have a objects declared outside the plan. E.g. `study_date <-
-ymd("2024-05-08")`. These are still watched for changes, but they are not
+At the moment we have a objects declared outside the plan. E.g. `study_date <- ymd("2024-05-08")`.
+These are still watched for changes, but they are not
 targets. Their value is not available from the store. My advice is that it makes
 for a slightly better interactive development and debugging workflows to have
 them in the list of targets objects, so they become fully fledged targets, and
