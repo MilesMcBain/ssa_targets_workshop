@@ -74,4 +74,10 @@ https://auth.ala.org.au/userdetails/registration/createAccount
 4. Ahead of the workshop any time you can spend reviewing the example project will be worthwile, so the project content itself can be les distracting. See:
   - https://github.com/milesmcbain/classic_r_project
 
+5. I'll be using keyboard shortcuts for a couple of RStudio Addins provided by {targets}, in particular:
+  - 'Run a targets pipeline in the foreground'
+  - 'Load target at cursor'
+
+You may also enjoy [creating keyboard shortcuts](https://docs.posit.co/ide/user/ide/guide/productivity/add-ins.html#keyboard-shortcuts) for these.
+
 
