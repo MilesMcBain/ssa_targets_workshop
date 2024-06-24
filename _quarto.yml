@@ -10,9 +10,9 @@ website:
       - typical_R_projects.qmd
       - pure_functions.qmd
       - targets_plan.qmd
-      - long_vs_wide.qmd
       - debugging.qmd
       - branching.qmd
+      - long_vs_wide.qmd
       - getting_help.qmd
       - more.qmd
 

@@ -28,9 +28,9 @@ Miles McBain is a Data Scientist and R package developer who has been using `{ta
 |   TBA     | Motivating Targets: Strengths and weaknesses of typical R project workflows             |
 |   TBA     | Pure functions and their benefits as units of work                                      |
 |   TBA     | The {targets} plan and the two kinds of reproducibility                                 |
-|   TBA     | Long vs Wide processes                                                                  |
 |   TBA     | New debugging access panels                                                             |
 |   TBA     | Divide and conquer with branching                                                       |
+|   TBA     | Long vs Wide processes                                                                  |
 |   TBA     | Things that may go wrong and where to get help                                          |
 |   TBA     | Advanced topics: Meta-programming, Tarcheytypes, Multi-plan projects, Cloud computing    |
 
