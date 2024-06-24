@@ -87,6 +87,7 @@ And here is the corresponding section of the {targets} graph:
 {targets} builds graphs like this by analysising your code. It assumes that each target depends only on its inputs, and returns a single output. Although that output can be a collection of things that is iterated over. More on that later.
 
 By connecting target nodes via their input and output edges {targets} can determine some interesting things using this graph:
+
   - For a given change in data / or code, the set of all downstream targets that depend on that data / code. When the pipeline is re-run only the targets that depend on things changed are built.
     - The results are guaranteed to be as if the entire pipeline had been re-rerun from start to finish.
   - It can determine nodes graph that do not share common dependencies. These targets can be computed in parallel to speed up the overall plan execution.

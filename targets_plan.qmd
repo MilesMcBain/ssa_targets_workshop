@@ -1,13 +1,13 @@
 # The {targets} plan
 
-As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in coverting a pipeline to use {targets}. The `run.R` we built already looks a lot like a {targets} 'plan'.
+As discussed in the last section, refactoring our project into a collection of functions is actually most of the work in converting a pipeline to use {targets}. The `run.R` we built already looks a lot like a {targets} 'plan'.
 
 It's time we actually defined what a {targets} plan is. This can be a little confusing because there are two things that users might refer to as the 'plan':
 
 1. A script file, by convention called `_targets.R`, that sits in the root folder of the project.
-  - Sets up environment for the project's targets. Loads packages, sources script files containing functions to be called. Sets global state: options, evironement variables etc.
+  - Sets up environment for the project's targets. Loads packages, sources script files containing functions to be called. Sets global state: options, environment variables etc.
   - Returns, as its last object, a list of target objects.
-2. The list of target objects itself. This data structure is what is analysed to determine the dependcy structure of the pipeline graph.
+2. The list of target objects itself. This data structure is what is analysed to determine the dependency structure of the pipeline graph.
 
 So in classic R fashion, the definition of the computational graph is itself a
 data structure which can be manipulated to great metaprogramming effect. For
@@ -15,7 +15,7 @@ example we can have targets that appear in the `_targets.R` as a single
 computational node, but are actually expanded out into several targets in the
 final returned object.[^1]
 
-[^1]: More concretely: We could have a 'model fit' target that decomposes into two separate targets for the model and performance statistics. We could use an argument to change the assessment criteria without rebuilding the model. Don't worry if that idn't make sense yet.
+[^1]: More concretely: We could have a 'model fit' target that decomposes into two separate targets for the model and performance statistics. We could use an argument to change the assessment criteria without rebuilding the model. Don't worry if that didn't make sense yet.
 
 In this workshop we'll refer to the `_targets.R` file as the plan.
 
@@ -74,6 +74,7 @@ tar_render(report, "docs/report.Rmd")
 
 8. Wrap each pipeline output in the report in `tar_read()`, e.g.:
 ```{r}
+#| eval: false
 tar_read(gg_species_distribution_points)
 ```
 
@@ -150,9 +151,9 @@ the {targets} framework determined it already had the output for them,
 since nothing had changed since first time we ran the plan.
 
 The built version of every target in the plan is stored in a place referred to
-as the store. By defeault the store lives inside the `_targets` folder which
+as the store. By default the store lives inside the `_targets` folder which
 {targets} creates the first time we call `tar_make()`, and then refers to on every
-subequent run.
+subsequent run.
 
 For our project, that folder looks like this now:
 
@@ -180,7 +181,7 @@ _targets
 └── user
 ```
 
-`_targets/objects` contains the R objects returned from the functions that ran for each target. Each object is serialised to a file in Rds format, and labelled with the associated target's name. The file format is configurable with the the `format` option of `tar_target()`. There are also format helpers available like `tarchetypes::tar_parquet`, which defines a target that will be serialised to parquet format.
+`_targets/objects` contains the R objects returned from the functions that ran for each target. Each object is serialised to a file in Rds format, and labeled with the associated target's name. The file format is configurable with the the `format` option of `tar_target()`. There are also format helpers available like `tarchetypes::tar_parquet`, which defines a target that will be serialised to parquet format.
 
 There are some targets that are not present. File targets are stored only in the metadata.
 
@@ -208,15 +209,15 @@ Targets can be read from the store like:
 
 ```{r}
 #| eval: false
- species_classification_model_training_summarys <-
-   tar_read(species_classification_model_training_summarys) # returns value
-tar_load(species_classification_model_training_summarys) # adds to global environment
+ species_classification_model_training_summary <-
+   tar_read(species_classification_model_training_summary) # returns value
+tar_load(species_classification_model_training_summary) # adds to global environment
 ```
   - This is very useful to inspect intermediate targets to do further development with, or debug the plan.
 
 # Cleaning the store
 
-- Running `tar_invalidate(occurences)` means the next time the plan is run `occurrences` will be rebuilt, which MAY trigger downstream targets to be rebuilt, but not necissarily if targets identifies the value hasn't changed. The stored value and metadata is retained.
+- Running `tar_invalidate(occurrences)` means the next time the plan is run `occurrences` will be rebuilt, which MAY trigger downstream targets to be rebuilt, but not necessarily if targets identifies the value hasn't changed. The stored value and metadata is retained.
 - `tar_delete()` removes targets from the store. It supports 'tidyselect' style name matching.
   - `tar_delete(everything())` wipes the whole store.
 - `tar_prune()` removes historical targets from the store that are no longer in the plan.
@@ -226,14 +227,14 @@ tar_load(species_classification_model_training_summarys) # adds to global enviro
 
 The graph of targets defined in the plan can be visualised with either
   - `tar_visnetwork()`
-  - `tar_gimpse()` - doesn't show information about which targets are up to date
+  - `tar_glimpse()` - doesn't show information about which targets are up to date
 
 e.g.
 
-[The result of tar_visnetwork() on our project.](images/targets_visnetwork2.png)
+![The result of tar_visnetwork() on our project.](images/targets_visnetwork2.png)
 
 These get messy fast, but one useful aspect is targets that align vertically are
-not dependent on eachother, so it can help you understand the scope for
+not dependent on each other, so it can help you understand the scope for
 parallelisation to speed up running the plan.
 
 # Finer points
@@ -305,11 +306,11 @@ Here I'll give you a quick demo of how you proceed with development.
 The main elements are:
 
   1. `tar_load()` the targets you want to work with interactively from the targets store with `tar_load()`
-    - There is an RStuido Addin that ships with targets that can load the target under the cursor from the store. It is highly recommended that you make a keyboard shortut for this. See [creating a keyboard shortcuts for RStudio addins](https://docs.posit.co/ide/user/ide/guide/productivity/add-ins.html#keyboard-shortcuts)
+    - There is an RStuido Addin that ships with targets that can load the target under the cursor from the store. It is highly recommended that you make a keyboard shortcut for this. See [creating a keyboard shortcuts for RStudio addins](https://docs.posit.co/ide/user/ide/guide/productivity/add-ins.html#keyboard-shortcuts)
   2. Declare a new target, and create a new function to be home to your work.
     - Don't forget about `{fnmate}`!
   3. Once your function seems like it will work, immediately run `tar_make()` - I also highly advise making a keyboard shortcut for this.
-    - It's also convenient to run `tar_marke(target_name)` to run the pipeline up to, but not past, the target you built, if there are other unrelated targets you don't want to run right now.
+    - It's also convenient to run `tar_make(target_name)` to run the pipeline up to, but not past, the target you built, if there are other unrelated targets you don't want to run right now.
   4. Repeat. (e.g. `tar_load()` the target you just defined and built to do further work)
 
 Sometimes people ask about where to put experimental code they're not sure should be in the plan yet. At the bottom of a file I'm working with I sometimes keep a 'scratchpad' of related code inside a block like:
@@ -344,9 +345,9 @@ your projects. The cake is baked. It's all icing from here.
 
 # The two kinds of reproducibility
 
-Hopefully you can see how the plan we have now defeats classes reproducibility issues typically experienced with classic R projects. Explicity, we get a more reproducible workflow since:
+Hopefully you can see how the plan we have now defeats classes reproducibility issues typically experienced with classic R projects. Explicitly, we get a more reproducible workflow since:
 
-  - Our targets are built in a separate session, so cannot be affected the by the state of our interactive development evironment.
+  - Our targets are built in a separate session, so cannot be affected the by the state of our interactive development environment.
   - Since `{targets}` intelligently caches our work, we can frequently run the pipeline with the same reproducibility guarantees as if we were running it from scratch, but take a fraction of the time.
     - Avoids the situation where the pipeline is rarely run end to end after small changes.
 
@@ -362,7 +363,7 @@ Imagine you are tasked with peer-reviewing a pipeline. If that pipeline is engin
     - You might even run `tar_visnetwork()` To get a feel for the most important chains of targets.
   3. When you decide you need to inspect the code for a target to understand it better, you can immediately:
     - `tar_load()` the input targets from the store, and execute a 'jump to definition' to go directly to the code where those targets are used. You can interactively play with the code until it makes sense.
-  4. You can context switch away and come back, maybe days later, and do exactly the same thing. All the pipleine's targets are still sitting in the store ready for immediate interactive use.
+  4. You can context switch away and come back, maybe days later, and do exactly the same thing. All the pipeline's targets are still sitting in the store ready for immediate interactive use.
 
 For similar reasons as described here, `{targets}` works very well to support teams that have a high degree of context switching.
 
