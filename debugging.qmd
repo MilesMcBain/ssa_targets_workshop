@@ -1,0 +1,198 @@
+# Debugging {targets} with new access panels
+
+In her highly recommended talk [**Object of type 'closure' is not subsettable**](https://www.youtube.com/watch?v=vgYS-F8opgE), Jenny Bryan discusses
+leaving yourself 'access panels', like options or arguments that turn on features that help your future self in debugging endeavours. As we shall see `{targets}` powerful new debugging access panels.
+
+First we look at how problems present and then we review a spectrum of increasingly powerful debugging techniques made available by `{targets}`
+
+## What it looks like when things go bad
+
+### Errors
+
+By default, when an error occurs in targets the pipeline stops. It should be pretty clear from `{targets}`' output which target has thrown the error:
+
+```
+▶ dispatched target species_classification_model
+✖ errored target species_classification_model
+✖ errored pipeline [0.184 seconds]
+Error:
+! Error running targets::tar_make()
+Error messages: targets::tar_meta(fields = error, complete_only = TRUE)
+Debugging guide: https://books.ropensci.org/targets/debugging.html
+How to ask for help: https://books.ropensci.org/targets/help.html
+Last error message:
+    I'm broken
+Last error traceback:
+    fit_final_species_classification_model(training_data = training(test_tra...
+    stop("I'm broken")
+    .handleSimpleError(function (condition)  {     state$error <- build_mess...
+    h(simpleError(msg, call))
+```
+
+### Warnings
+
+If your problem results in warnings appearing they won't stop the pipeline. Instead you'll see something like:
+
+```
+▶ dispatched target species_classification_model
+● completed target species_classification_model [3.249 seconds]
+✔ skipped target species_model_validation_data
+✔ skipped target base_plot_model_roc_object
+✔ skipped target gg_species_class_accuracy_hexes
+✔ skipped target report
+▶ ended pipeline [5.439 seconds]
+Warning messages:
+1: I'm warning you
+2: 1 targets produced warnings. Run targets::tar_meta(fields = warnings, complete_only = TRUE) for the messages.
+NULL
+```
+
+So although we don't immediately see which target threw the warnings, `{targets}` does tell us how to find that out. If we run the suggested code:
+
+```{r}
+#| eval:false
+targets::tar_meta(fields = warnings, complete_only = TRUE)
+```
+
+we get precisely the metadata we need:
+
+```
+# A tibble: 1 × 2
+  name                         warnings
+  <chr>                        <chr>
+1 species_classification_model Im warning you
+```
+
+### If we get neither
+
+If we just got some nonsense results we might have to work a bit harder to
+figure out where to start looking for the problem. The process we described for
+peer reviewing the pipeline in the 'targets plan' section is similar to how we could
+approach finding the logic problem efficiently.
+
+## The debugging arsenal
+
+### Call `tar_load()` and tinker
+
+You'll very quickly be able to populate all a target's inputs in your global environment by using `tar_load()`.
+  - This is why having functions that use the same argument names as the targets they take as arguments is quite beneficial.
+  - If this is not the case you might enjoy loading all the input targets and then calling `debugonce`, before manually running the problematic target's expression interactively.
+
+### Use browser()
+
+R's classic can be brought to bear!
+  - Just one obstacle, the targets are typically built in a separate session that we don't have interactive access to!
+  - We can actually run the pipeline in the current interactive R session.
+    - Just make sure the session is pretty 'fresh' or you may create more problems than you solve.
+
+By way of example:
+
+1. put `browser()` on the first line off `fit_final_species_classification_model()`
+
+2. To build the pipeline run `tar_make(callr_function = NULL)`
+  - We're saying "Don't use {callr}" which is the method of creating child sessions for our pipeline execution.
+
+End up interactively debugging the target:
+
+```
+✔ skipped target gg_species_distribution_hexes
+✔ skipped target gg_species_distribution_months
+✔ skipped target test_train_split
+✔ skipped target species_classification_model_training_summary
+▶ dispatched target species_classification_model
+Called from: fit_final_species_classification_model(training_data = training(test_train_split),
+    species_classification_model_training_summary)
+Browse[1]>
+```
+
+### Use the 'debug' option
+
+This behaves like using `browser()` above, but is a bit better since you don't have to make a change to your code that you could forget to undo!
+  - Does anyone else commit `browser()` to repos embarrassingly frequently?
+
+If you add to `tar_option_set()` in `_targets.R`
+
+```{r}
+#| eval: false
+tar_option_set(
+  seed = 2048,
+  debug = "species_classification_model"
+)
+
+```
+
+Then you can call `tar_make()` and the pipeline will pause for interactive debugging when `species_classification_model` is reached.
+
+If you'd like to speed things up by skipping processing any other targets you can do:
+
+```{r}
+#| eval: false
+tar_make(species_classification_model, callr_function = NULL, shortcut = TRUE)
+```
+
+And `{targets}` will immediately begin debugging this target.[^1]
+
+[^1]: It may be tempting to use `shortcut` more frequently to speed things up, but using `shortcut` is equivalent to running a numbered pipeline stage script without running the prior scripts in the 'classic R project' we started with. Do it too often and you'll have reproducibility debt that needs to be paid down in bulk.
+
+Being able to name a target to debug increases in usefulness once we understand a more advanced concept called 'branching'.
+
+### Use the `workspace` option
+
+This is my personal go-to when things just aren't making sense. A 'workspace' is
+the set of all of a target's inputs. Since targets should be pure functions,
+this should be all the state we need to investigate, reproduce, and fix bugs
+occurring in that target.
+
+The first way to use workspaces is to set an option that automatically saves them on error:
+
+```{r}
+#| eval: false
+tar_option_set(
+  seed = 2048,
+  workspace_on_error = TRUE
+)
+```
+
+When an error occurs we will get a slightly different output:
+
+```
+✔ skipped target test_train_split
+✔ skipped target species_classification_model_training_summary
+▶ dispatched target species_classification_model
+▶ recorded workspace species_classification_model
+✖ errored target species_classification_model
+✖ errored pipeline [0.215 seconds]
+```
+
+If we call `tar_workspace(species_classification_model)`, all of the dependencies of `species_classification_model`
+will be loaded into the global environment. These are:
+  - `test_train_split`
+  - `species_classification_model_training_summary`
+
+But isn't this just the same as calling `tar_load`?
+  - Hopefully / Mostly yes!
+  - But occasionally through contrived circumstances you may not be `tar_load`ing what you think you are. In this case there's no way for that mistake to happen.
+  - There are also circumstances where you might not know the names of a specific target's inputs, and so cannot `tar_load` them at all.
+    - More on this when we talk about 'branching'
+
+There's also another way to use workspaces, when you might not be getting an error, but you want record a workspace to check on suspicious behaviour. We can instead do:
+
+```{r}
+tar_option_set(
+  seed = 2048,
+  workspaces = c("species_classification_model", "occurrences_weather_hexes")
+)
+```
+
+And workspaces for these targets will be recorded, whether they error or not.
+
+# In practice
+
+In my personal experience > 90% of targets bugs can be quickly dispatched by the
+'Call `tar_load()` and tinker' approach.
+
+If that fails I reach straight for workspaces. When I am using this mysterious
+'branching' thing I keep referring to I'll rely on workspaces more frequently.
+
+So if you take one thing from this section it should be:
+  - There's this 'workspaces' concept that will probably help if you're having a hard time debugging something.
