@@ -304,12 +304,13 @@ Here I'll give you a quick demo of how you proceed with development.
 
 The main elements are:
 
-  1. Load the targets you want to work with interactively from the targets store with `tar_load()`
+  1. `tar_load()` the targets you want to work with interactively from the targets store with `tar_load()`
     - There is an RStuido Addin that ships with targets that can load the target under the cursor from the store. It is highly recommended that you make a keyboard shortut for this. See [creating a keyboard shortcuts for RStudio addins](https://docs.posit.co/ide/user/ide/guide/productivity/add-ins.html#keyboard-shortcuts)
-  2. Create a new function to be home to your work.
+  2. Declare a new target, and create a new function to be home to your work.
     - Don't forget about `{fnmate}`!
   3. Once your function seems like it will work, immediately run `tar_make()` - I also highly advise making a keyboard shortcut for this.
-  4. Repeat.
+    - It's also convenient to run `tar_marke(target_name)` to run the pipeline up to, but not past, the target you built, if there are other unrelated targets you don't want to run right now.
+  4. Repeat. (e.g. `tar_load()` the target you just defined and built to do further work)
 
 Sometimes people ask about where to put experimental code they're not sure should be in the plan yet. At the bottom of a file I'm working with I sometimes keep a 'scratchpad' of related code inside a block like:
 
@@ -342,3 +343,26 @@ If you can answer those, you now have enough tools to use targets productively o
 your projects. The cake is baked. It's all icing from here.
 
 # The two kinds of reproducibility
+
+Hopefully you can see how the plan we have now defeats classes reproducibility issues typically experienced with classic R projects. Explicity, we get a more reproducible workflow since:
+
+  - Our targets are built in a separate session, so cannot be affected the by the state of our interactive development evironment.
+  - Since `{targets}` intelligently caches our work, we can frequently run the pipeline with the same reproducibility guarantees as if we were running it from scratch, but take a fraction of the time.
+    - Avoids the situation where the pipeline is rarely run end to end after small changes.
+
+There is a second kind or reproducibility supported by this workflow though.
+I'll argue with `{targets}` we can more easily reproduce an understanding of
+what all this code is doing in someone else's head.
+
+Imagine you are tasked with peer-reviewing a pipeline. If that pipeline is engineered with `{targets}` your workflow looks like:
+
+  1. Run the full pipeline with `tar_make()`.
+    - Barring issues with the package dependencies, the code just works! It has frequently been tested end-to-end.
+  2. You start your review form the `_targets.R` which gives you a nice overview of what the important bits of information the pipeline depends on are.
+    - You might even run `tar_visnetwork()` To get a feel for the most important chains of targets.
+  3. When you decide you need to inspect the code for a target to understand it better, you can immediately:
+    - `tar_load()` the input targets from the store, and execute a 'jump to definition' to go directly to the code where those targets are used. You can interactively play with the code until it makes sense.
+  4. You can context switch away and come back, maybe days later, and do exactly the same thing. All the pipleine's targets are still sitting in the store ready for immediate interactive use.
+
+For similar reasons as described here, `{targets}` works very well to support teams that have a high degree of context switching.
+
