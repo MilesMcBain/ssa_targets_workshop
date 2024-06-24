@@ -43,13 +43,35 @@ As we step through each topic we'll refactor our starter project using our new k
 2. Make sure you have these packages installed:
 
 ```
-install.packages(c("targets", "tarchetypes", "tidyverse", "conflicted", "galah", "here", "sf", "h3jsr", "ggspatial"))
+install.packages('pak') # works better / faster than install.packages, especially on Windows.
+pak::pkg_install(c(
+"conflicted",
+"dplyr",
+"galah",
+"ggplot2",
+"h3jsr",
+"lubridate",
+"pROC",
+"purrr",
+"randomForest",
+"readr",
+"rmarkdown",
+"rsample",
+"sf",
+"tibble",
+"tidyr",
+"targets",
+"tarchetypes"
+))
 ```
 
 If you're a Linux user `sf` might give you some challenges (but you're used to that, right?). Be sure to study their README.
-  - likewise for `V8` dep of `h3jsr`, see static lib option for linux.
+  - likewise for `V8` dep of `h3jsr`, see static lib option for linux described in README.
 
 3. Our example project is going to pull data from the _Atlas of Living Australia_, so create an account with a valid email address, here:
 https://auth.ala.org.au/userdetails/registration/createAccount
+
+4. Ahead of the workshop any time you can spend reviewing the example project will be worthwile, so the project content itself can be les distracting. See:
+  - https://github.com/milesmcbain/classic_r_project
 
 
