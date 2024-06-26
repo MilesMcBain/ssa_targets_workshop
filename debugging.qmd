@@ -50,7 +50,7 @@ NULL
 So although we don't immediately see which target threw the warnings, `{targets}` does tell us how to find that out. If we run the suggested code:
 
 ```{r}
-#| eval:false
+#| eval: false
 targets::tar_meta(fields = warnings, complete_only = TRUE)
 ```
 
@@ -178,6 +178,7 @@ But isn't this just the same as calling `tar_load`?
 There's also another way to use workspaces, when you might not be getting an error, but you want record a workspace to check on suspicious behaviour. We can instead do:
 
 ```{r}
+#| eval: false
 tar_option_set(
   seed = 2048,
   workspaces = c("species_classification_model", "occurrences_weather_hexes")

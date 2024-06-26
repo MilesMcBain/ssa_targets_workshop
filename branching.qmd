@@ -9,6 +9,7 @@ For example:
   - You 'add more cores', or utilise more parallel threads,
 but then you unexpectedly run out of memory.
   - You get iterations that have model convergence problems due a bad combinations of hyper parameters.
+  - A colleague suggests you need to expand you hyper-parameter search.
 
 These types of things are frustrating because the problem might not appear until
 hours into a very long running process, and the intermediate result of all of those hours is
@@ -18,14 +19,18 @@ With `{targets}` we can use a technique called 'dynamic branching' to promote ev
 
   - Each result is individually cached, which means large iterative processes are now resumable.
   - We can also add or remove iterations by changing input data, while reusing the results from previous iterations.
+  - We can take advantage of `{targets}` parallelism features to run the iterations in parallel.
 
-We'll refactor the model grid search in our project to use this approach. After we see how it works it's going to be a little easier to explain why it is called 'dynamic branching'.
+We'll refactor the model grid search in our project to use this approach. After
+we see how it works it's going to be a little easier to explain why it is called
+'dynamic branching'.
 
 # Dynamic branching refactor steps:
 
 In the process of this refactor we're going to remove our training grid. If you recall it was a dataframe with one row per combination of training fold and model hyper parameters:
 
 ```{r}
+#| eval: false
   occurrence_cv_splits <-
     vfold_cv(training_data, v = 5, repeats = 1)
 
@@ -52,7 +57,7 @@ This refactor will give `{targets}` the job of materialising the grid, with one 
 i.e put this code:
 
 ```{r}
-
+#| eval: false
   summarised_training_results <-
     training_results |>
     summarise(
@@ -83,6 +88,7 @@ inside a new target:
 2. Promote `mtry_candidates` and `num_trees_candidates` to plan targets:
 
 ```{r}
+#| eval: false
  tar_target(
     mtry_candidates,
     c(1, 2, 3)
@@ -96,6 +102,7 @@ inside a new target:
 3. Make the cross validation fold dataset into a plan target:
 
 ```{r}
+#| eval: false
   tar_target(
     training_cross_validation_folds,
     vfold_cv(training(test_train_split), v = 5, repeats = 1)
@@ -138,7 +145,8 @@ tar_target(
   )
 ```
 
-We're introducing a bit of magic here: `pattern = cross(training_cross_validation_folds, mtry_candidates, num_trees_candidates)`.
+We're introducing a bit of magic here:
+`pattern = cross(training_cross_validation_folds, mtry_candidates, num_trees_candidates)`.
 
 This says to `{targets}`: We're declaring a group of targets here, that you're
 going to create for us. That group is defined by evaluating this target's expression on a set of inputs, this case a cross product of input targets.  If we call `tar_make()` at this point we get:
@@ -411,6 +419,7 @@ Things run pretty fast now. But what if we wanted to speed things up by making m
 We add `library(crew)` to our packages and then set our options like:
 
 ```{r}
+#| eval: false
   tar_option_set(
     seed = 2048,
     controller = crew_controller_local(workers = 2)
@@ -465,7 +474,7 @@ Hooks are ways to modify the target definitions in our plan after we have define
   In our case we can append `tar_hook_before()` to the end of our `list()` of target definitions:
 
 ```{r}
-  #| eval: false
+#| eval: false
 
   list(
   # inside list of targets
@@ -477,7 +486,7 @@ Hooks are ways to modify the target definitions in our plan after we have define
       )
       galah_config(
         atlas = "ALA",
-        email = Sys.getenv("ALA_EMAIL") # You can replace this with your email to run. But you might now want to commit it to a public repository!
+        email = Sys.getenv("ALA_EMAIL") # You can replace this with your email to run. But you might not want to commit it to a public repository!
       )
     }
   )
