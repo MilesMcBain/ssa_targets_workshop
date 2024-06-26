@@ -61,7 +61,8 @@ pak::pkg_install(c(
 "tibble",
 "tidyr",
 "targets",
-"tarchetypes"
+"tarchetypes",
+"crew"
 ))
 ```
 
