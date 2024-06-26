@@ -209,8 +209,8 @@ We successfully refactored to 'dynamic branching'. We shall see in a moment all 
 
 'Branching' is a reference to the tree-like appearance of pipeline graphs.
 
-Targets has a number of ways to add targets to the graph pragmatically. In
-our case we instructed `{targets}` to add a target to our graph for each combination of model
+`{targets}` has a number of ways to add targets to the graph programatically. In
+our case we instructed `{targets}` to add a training target to our graph for each combination of model
 parameters and training data. After being computed those targets are immediately
 consolidated into into the dataset
 `species_classification_model_training_results` which we then summarised.
@@ -494,7 +494,7 @@ Hooks are ways to modify the target definitions in our plan after we have define
 
 Hooks can be targeted toward specific targets using the `names`. A classic use
 is to strip back `{ggplot2}` objects before they are saved to the store, since
-they can hold onto reference to a large dataset. E.g.
+they can hold onto a reference to a large dataset. E.g.
 
 ```{r}
 #| eval: false
@@ -530,6 +530,7 @@ There are helpful options for dealing with resource usage, for example:
   - We can also use the `deployment` option to specify only certain targets go to workers, and the rest get processed in the main thread that runs our plan.
 
 You don't need to remember these.
+
   - You can find them in the help for `tar_option_set()`.
   - They can all be set globally or at an individual target level
   - These and other options give you valuable control of 'shape' of your pipeline's process.
