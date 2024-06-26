@@ -75,6 +75,7 @@ approach finding the logic problem efficiently.
 ### Call `tar_load()` and tinker
 
 You'll very quickly be able to populate all a target's inputs in your global environment by using `tar_load()`.
+
   - This is why having functions that use the same argument names as the targets they take as arguments is quite beneficial.
   - If this is not the case you might enjoy loading all the input targets and then calling `debugonce`, before manually running the problematic target's expression interactively.
 
@@ -108,6 +109,7 @@ Browse[1]>
 ### Use the 'debug' option
 
 This behaves like using `browser()` above, but is a bit better since you don't have to make a change to your code that you could forget to undo!
+
   - Does anyone else commit `browser()` to repos embarrassingly frequently?
 
 If you add to `tar_option_set()` in `_targets.R`
@@ -166,10 +168,12 @@ When an error occurs we will get a slightly different output:
 
 If we call `tar_workspace(species_classification_model)`, all of the dependencies of `species_classification_model`
 will be loaded into the global environment. These are:
+
   - `test_train_split`
   - `species_classification_model_training_summary`
 
 But isn't this just the same as calling `tar_load`?
+
   - Hopefully / Mostly yes!
   - But occasionally through contrived circumstances you may not be `tar_load`ing what you think you are. In this case there's no way for that mistake to happen.
   - There are also circumstances where you might not know the names of a specific target's inputs, and so cannot `tar_load` them at all.
@@ -196,4 +200,5 @@ If that fails I reach straight for workspaces. When I am using this mysterious
 'branching' thing I keep referring to I'll rely on workspaces more frequently.
 
 So if you take one thing from this section it should be:
+
   - There's this 'workspaces' concept that will probably help if you're having a hard time debugging something.
