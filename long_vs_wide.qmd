@@ -1,0 +1,30 @@
+# Long vs Wide processes
+
+Within the example project there's a bothersome little wrinkle. We call a helper
+function `compute_h3_indices_at_resolutions()` twice. This funciton is creating
+a set of spatial indicies for our data. It's a potentially expensive process on larger data, and ideally
+one we'd only perform once.
+
+We call it:
+
+  - Once in `wrangle_and_join_weather()` as part of the creation of our 'clean' dataset
+  - Once in `plot_species_class_accuracy_hexes()` to create a plot of classifier accuracy by hexagon.
+    - We're using the testing data for the model with validation metrics at that point and we dropped the spatial index when we created the training data.
+
+What we could perhaps to instead is:
+
+  1. Compute the spatial indicies for our occurrences in a separate dataset
+  2. Join them only when needed e.g. for the hex-binned plots.
+
+Notes
+- in classic workflow datasets goes through a very linear path
+  - there's this kind of unspoken quest to build the perfect one true clean dataset from which all analysis can flow.
+  - columns get added and added, rarely removed.
+    - Datasets get quite wide.
+  - often the binding name is reused each time
+- This style is what I am going to call a 'long' process.
+- Part of the reason this happens is that repeadtly joining the same data is slow!
+  - We've already established people's creative ways to avoiding waiting are a major source of reproducibility problems.
+  - It may optimise cpu processing time
+  - Not optimal for `{targets}`!
+
