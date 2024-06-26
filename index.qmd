@@ -46,9 +46,10 @@ The {targets} R package has cleared the high bar set by the [rOpenSci peer revie
 
 # Overview of the workshop
 
-  - Trying to be a somewhat foundational or like a 'gentle introduction'. The knowledge you need to get value from `{targets}` is surprisingly small.
+  - Trying to be foundational or like a 'gentle introduction'. The knowledge you need to get value from `{targets}` is surprisingly small.
   - We'll spend time up front understanding the core problems {targets} solves. This will help us articulate the value to our teams.
   - Over the course of the workshop we'll progressively refactor an existing R project, written in a classic style, into a modern {targets} pipeline. This will let us see the benefits accumulate, as we deploy more advanced techniques.
+  - We may run out of time, so sections are in priority order. There should be enough instructions to work through the stuff we don't get to as homework.
 
 # Notation
 
