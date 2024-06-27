@@ -1,0 +1,43 @@
+# Things that can go wrong
+
+As you branch out and try to do more ambitious things with `{targets}` you will
+hit stumbling blocks. Where targets doesn't behave as you expect.
+
+Common themes among these issues are
+
+  - Things that defeat `{targets}` static code analysis, so code changes are not detected.
+    - For example `purrr::partial()`, `purrr::safely()`, `Vectorize()` always return the same function that captures the function you supply in a closure. `{targets}` static code analysis looks at the body of the function for changes, but not the closure.
+  - Objects store data externally to R
+    - e.g. use external pointers to objects created and managed by compiled C or CPP code.
+    - like `data.table`, `stars`, `raster`, `terra` etc.
+    - care needs to be taken to serialise these objects properly. In many cases the default Rds serialisation will fail to reproduce the object, since the loaded object will just have an invalid pointer.
+    - Use the "format" arg of `tar_target()` to choose a better format.
+    - You can author your own custom formats e.b. [`{geotargets}`](https://github.com/njtierney/geotargets)
+
+There are things that you likely want to do that aren't supported in `{targets}`. It pays to check `{tarchetypes}` and other ['targetopia'](https://wlandau.github.io/targetopia/) packages.
+
+  - A recurrent request is to have targets that become stale after a certain amount
+  of time passes. E.g. you want to make a new API call if stored target is more
+  than X days old. This feature does not exist explicitly in `{targets}` but is
+  supported in `tarchetypes::tar_age()`.
+
+# Where to find help
+
+- The [discussions section of the {targets} GitHub repository](https://github.com/ropensci/targets/discussions) is a good place to ask questions about how to achieve something with `{targets}` or why it is not behaving as you expect.
+  - Please avoid raising these as issues!
+- The rOpenSci slack has a dedicated channel to `{targets}`
+- The #rstats hashtag on Fosstodon / Mastodon is watched by a few `{targets}` enthusiasts.
+
+# Read The Fancy Manual
+
+https://books.ropensci.org/targets/
+
+It's probably the only software manual I have read start to finish.[^1]
+  - It's updated frequently.
+  - It's written for humans.
+    - Not overly dry
+    - Well curated. Doesn't cover EVERYTHING.
+
+[^1]: Apart from those thick glossy concept art drenched jobs that shipped with 90s video game CD-ROMS.
+
+
