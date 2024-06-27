@@ -1,0 +1,15 @@
+# The End
+
+Thanks for your participation. There's more to `{targets}` than we covered here, but I hope you feel on solid enough foundation to take some steps with it.on your own projects.
+
+My general advice is:
+
+  - Keep it simple! Avoid Dynamic Branching and other advanced techiniques until you're either confident, or they're absolutely necessary.
+  - Try to keep your `{tarets}` plans (`_targets.R`) really clean and high level. Don't junk them up with a lot of implementation detail (code not in funcions).
+    - This retains their value as a review / communication tool.
+
+If you feel able, I would much appreciate your feedback via this [short form](https://forms.gle/eZNiu6v97xc5AQZHA).
+
+If you're working through the workshop content afterward and get stuck, or spot any problems, feel free to raise an issue on the [workshop GitHub repository](https://github.com/MilesMcBain/ssa_targets_workshop).
+
+

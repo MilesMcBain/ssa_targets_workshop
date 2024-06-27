@@ -235,7 +235,7 @@ tar_target(
 )
 ```
 
-We again use `pattern` to express this, but this time we're expressing a 1:1
+We again use `pattern` to express this, but this time with `map` we're expressing a 1:1
 transformation of the input targets, instead of a cross product.
 
 Our pipeline graph is having 'branches' extended, so that you can imagine looks like:
@@ -552,6 +552,9 @@ The completed refactor for this section is available on [this branch of the exam
    - Makes iterations resumable
    - Makes iterations parallelisable
    - Can add iterations as inputs are updated, but keep prior work
+   - There are two important arguments for this.
+     - We discussed `pattern` (with `map` and `cross`). There are other patterns available.
+     - the `iteration` argument is also useful, but not covered here.
  - Hooks are useful for changing selections of targets after we have defined them
    - We can apply pre / post processing steps or do setup work.
  - `{targets}` has options for controlling resource usage.
