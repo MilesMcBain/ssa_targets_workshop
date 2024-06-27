@@ -218,6 +218,8 @@ With this:
       - Where we plot points
     - Another exercise for the reader!
 
+The completed refactor is available on [this branch of the example project](https://github.com/MilesMcBain/classic_r_project/tree/refactor4)
+
 # A wider angle
 
 If we compare the network graphs before this refactor:
