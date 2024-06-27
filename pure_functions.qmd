@@ -116,20 +116,120 @@ The first step in refactoring our classic workflow into {targets} is to refactor
 
 Follow my lead and we'll do our first refactor in preparation for {targets} to [our project](https://github.com/milesmcbain/classic_r_project).
 
+Don't worry, we won't do it all now. Just enough to give you the idea. I have a "Here's one I prepared earlier" for each refactor step.
+
+  - It would be a good exercise to attempt this complete task on your own
+
 ### Refactoring Steps
 
 1. Move config and library calls into run.R
   - All the subsequently created functions are going to be called and wired together in run.R
 2. Wrap up 01_ into a function that fetches data
+
+```{r}
+#| eval: false
+occurrences <- fetch_data(
+  study_species,
+  study_date,
+  study_area_file = inner_brisbane_boundary
+)
+```
+
 3. Wrap up 02_ into a funciton that wrangles data
+
+```{r}
+#| eval: false
+occurrences_weather_hexes <-
+  wrangle_and_join_weather(
+    species_data = occurrences,
+    study_species,
+    data_start_date,
+    weather_data_path,
+    h3_hex_resolutions
+  )
+```
+
 4. Split up 03_ into a function for each plot
+
+```{r}
+#| eval: false
+brisbane_river <- st_read(brisbane_river_file)
+gg_species_distribution_points <-
+  plot_species_distribution_points(
+    occurrences_weather_hexes,
+    brisbane_river
+  )
+
+gg_species_distribution_hexes <-
+  plot_species_distribution_hexes(
+    occurrences_weather_hexes,
+    brisbane_river
+  )
+
+gg_species_distribution_months <-
+  plot_species_distribution_months(
+    occurrences_weather_hexes
+  )
+
+
+```
+
 5. Split up 04_ into:
   - function the creates the training data
   - function that creates test train splits
   - function that does the model parameter grid search
   - function that fits final model
   - function that creates validation data from final model and test set
+
+```{r}
+#| eval: false
+occurrences_training_data <-
+  create_trainging_data(occurrences_weather_hexes)
+
+test_train_split <-
+  initial_split(occurrences_training_data)
+
+species_classification_model_training_summary <-
+  species_classification_model_grid_search(
+    training_data = training(test_train_split),
+    n_cv_folds = 5,
+    mtry_candidates = c(1, 2, 3),
+    num_trees_candidates = c(200, 500, 100)
+  )
+
+species_classification_model <-
+  fit_final_species_classification_model(
+    training_data = training(test_train_split),
+    species_classification_model_training_summary
+  )
+
+species_model_validation_data <-
+  create_validation_data(
+    species_classification_model,
+    test_data = testing(test_train_split)
+  )
+```
+
+
 6. Split 05_ into one function for each plot
+
+```{r}
+#| eval: false
+gg_species_class_accuracy_hexes <-
+  plot_species_class_accuracy_hexes(
+    species_model_validation_data,
+    brisbane_river,
+    h3_hex_resolutions
+  )
+
+# need to call plot on this one in our Rmd
+base_plot_model_roc_object <-
+  get_species_classifier_roc(
+    species_model_validation_data
+  )
+
+```
+
 7. Swap out all the images used in the Rmd for plot objects.
   - These are already in the global envirnonment and so can be seen by knitr / rmarkdown during render.
 
