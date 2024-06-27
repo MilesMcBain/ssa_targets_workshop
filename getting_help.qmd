@@ -14,7 +14,7 @@ Common themes among these issues are
     - like `data.table`, `stars`, `raster`, `terra` etc.
     - care needs to be taken to serialise these objects properly. In many cases the default Rds serialisation will fail to reproduce the object, since the loaded object will just have an invalid pointer.
     - Use the "format" arg of `tar_target()` to choose a better format.
-    - You can author your own custom formats e.b. [`{geotargets}`](https://github.com/njtierney/geotargets)
+    - You can author your own custom formats e.g. [`{geotargets}`](https://github.com/njtierney/geotargets)
 
 There are things that you likely want to do that aren't supported in `{targets}`. It pays to check `{tarchetypes}` and other ['targetopia'](https://wlandau.github.io/targetopia/) packages.
 
