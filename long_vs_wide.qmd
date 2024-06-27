@@ -1,9 +1,9 @@
 # Long vs Wide processes
 
 Within the example project there's a bothersome little wrinkle. We call a helper
-function `compute_h3_indices_at_resolutions()` twice. This funciton is creating
-a set of spatial indicies for our data. It's a potentially expensive process on larger data, and ideally
-one we'd only perform once.
+function `compute_h3_indices_at_resolutions()` twice. This function is creating
+a set of spatial indices for our data. It's a potentially expensive process on
+larger data, and ideally one we'd only perform once.
 
 We call it:
 
@@ -13,18 +13,229 @@ We call it:
 
 What we could perhaps to instead is:
 
-  1. Compute the spatial indicies for our occurrences in a separate dataset
+  1. Compute the spatial induces for our occurrences in a separate dataset
   2. Join them only when needed e.g. for the hex-binned plots.
 
-Notes
-- in classic workflow datasets goes through a very linear path
-  - there's this kind of unspoken quest to build the perfect one true clean dataset from which all analysis can flow.
-  - columns get added and added, rarely removed.
-    - Datasets get quite wide.
-  - often the binding name is reused each time
-- This style is what I am going to call a 'long' process.
-- Part of the reason this happens is that repeadtly joining the same data is slow!
-  - We've already established people's creative ways to avoiding waiting are a major source of reproducibility problems.
-  - It may optimise cpu processing time
-  - Not optimal for `{targets}`!
+But why did this wrinkle appear anyway?
 
+In a classic staged script workflow datasets goes through a very linear path.
+
+  - There's this kind of unspoken quest to build the perfect-one-true-clean dataset from which all analysis can flow.
+  - Columns get added and added, rarely removed.
+  - Datasets get quite wide.
+  - Often the binding name is reused each time:
+
+```{r}
+#|EFL: false
+  the_dataset <-
+    the_dataset |>
+      mutate( # or join, summarise, rbind, cbind etc.
+        # ...
+      )
+```
+
+- This style is what I am going to call a 'long' process.
+
+
+With `{targets}` long processes probably spend more CPU cycles than necessary. Why?
+  - <details><summary>
+  - Small changes to a target possibly trigger a large number of other targets to be rebuilt. Since the target you changed has a huge chain of targets hanging off it.
+  </summary>
+  </details>
+
+Initially when users get started with `{targets}` there can be tendency to
+continue to pursue this pattern of long chains of data transformations which are
+represented as linear sequences of {targets}.
+
+With `{targets}` we have the choice between:
+
+  - Minimising end to end running time of the plan
+    - As is usually the aim in the classic workflow
+    - Using 'long' processes
+  - Minimising total amount of running time of the plan ever
+    - By minimising dependencies between targets
+    - Using 'wide' processes
+
+We'll make our plan a little wider now by refactoring out the spatial index into a separate target.
+
+# Refactoring Steps
+
+1. Remove the this code from `wrangle_and_join_weather()`:
+
+```{r}
+#| eval: false
+  occurrences_weather_hexes <-
+    st_as_sf(
+      occurrences_weather,
+      coords = c("decimalLongitude", "decimalLatitude"),
+      remove = FALSE,
+      crs = first(occurrences$geodeticDatum)
+    ) |>
+    mutate(
+      compute_h3_indices_at_resolutions(h3_hex_resolutions, geometry)
+    )
+
+  occurrences_weather_hexes
+```
+
+and place it in a function that creates a dataset containing the spatial indices. We'll need to refactor it a bit further in a minute.
+
+```{r}
+#| eval: false
+tar_target(
+    occurrences_hexes,
+    create_h3_indexes(
+      occurrences_weather,
+      h3_hex_resolutions
+    )
+  )
+```
+
+2. Change the name of `occurrences_weather_hexes` to `occurrences_weather`, since it now has nothing to do with hexes.
+  - Remove the `h3_hex_resolutions` argument from `wrangle_and_join_weather()`
+  - Change the name also where this dataset is input to other targets
+
+3. Add an `id` column to `occurrences_weather` in `wrangle_and_join_weather()` like:
+
+```{r}
+#| eval: false
+occurrences_weather |>
+  mutate(id = seq(n()))
+```
+
+  - This will be a key for us to join to.
+
+4. Return select the `id` in the `select()` in `create_training_data()`
+
+5. Change the model formulas in `fit_fold_calc_results()` and `fit_final_species_classification_model()` from `scientificName ~ .` to `scientificName ~ . - id` to exclude our `id`.
+
+  - Actually changing the model formula in two places highlights we should probably break it out into its own target! Consider that an exercise left to the reader.
+
+6. Refactor `create_h3_indexes` further to just return `id` and the h3 indexes:
+
+```{r}
+#| eval: false
+  occurrences_hexes <-
+    st_as_sf(
+      occurrences_weather,
+      coords = c("decimalLongitude", "decimalLatitude"),
+      remove = FALSE,
+      crs = first(occurrences_weather$geodeticDatum)
+    ) |>
+    mutate(
+      compute_h3_indices_at_resolutions(h3_hex_resolutions, geometry)
+    ) |> st_drop_geometry() |>
+    select(
+      id,
+      starts_with("h3")
+    )
+
+  occurrences_hexes
+```
+
+7. To all the targets that start with `gg_` and end with `hexes` pass in our `occurrences_hexes` target and join to the main dataset before plotting.
+
+  - E.g. in `plot_species_distribution_hexes()` do this:
+
+```{r}
+#| eval: false
+hex_occurrences <-
+    occurrences_weather  |>
+    left_join(occurrences_hexes, by = "id") |> # the new bit
+    st_drop_geometry() |>
+    select(scientificName, h3_hex_8) |>
+    summarise(
+      count = n(),
+      .by = c("scientificName", "h3_hex_8")
+    ) |>
+    mutate(
+      geometry = cell_to_polygon(h3_hex_8)
+    ) |>
+    st_as_sf()
+
+  # plot stuff follows
+```
+
+  - In `gg_species_class_accuracy_hexes()` remove the `h3_hex_resolutions` argument and replace with `occurrences_hexes`.
+
+Replace this code:
+
+```{r}
+#| eval: false
+  model_validation_predictions_hex <-
+    species_model_validation_data |>
+    st_as_sf(
+      coords = c("decimalLongitude", "decimalLatitude"),
+      remove = FALSE,
+      crs = 4326
+    ) |>
+    mutate(
+      compute_h3_indices_at_resolutions(h3_hex_resolutions, geometry)
+    ) |>
+    st_drop_geometry()
+
+```
+
+With this:
+
+```{r}
+#| eval: false
+  model_validation_predictions_hex <-
+    species_model_validation_data |>
+    left_join(occurrences_hexes, by = "id")
+```
+
+8. In `plot_species_distributions_points()` we no longer have a spatial dataset. So have to make our data spatial for plotting:
+
+```{r}
+#| eval: false
+  occurrences_weather_points <-
+    occurrences_weather |>
+    st_as_sf(
+      coords = c("decimalLongitude", "decimalLatitude"),
+      remove = FALSE,
+      crs = first(occurrences_weather$geodeticDatum)
+    )
+
+  p <-
+  ggplot() +
+  geom_sf(
+    data = brisbane_river
+  ) +
+    geom_sf(
+      data = occurrences_weather_points
+    ) +
+    facet_wrap(~scientificName) +
+    theme_light() +
+    theme()
+
+  p
+```
+
+  - We're re-converting to point geometry here.
+    - We could make a similar argument to hexes for another target `occurrences_points` to be calculated and joined on as needed.
+      - Where we calculate hexes
+      - Where we plot points
+    - Another exercise for the reader!
+
+# A wider angle
+
+If we compare the network graphs before this refactor:
+
+![Everything depending on occurrences_weather_hexes](images/long_network.png)
+
+With the one post this refactor:
+
+![Some targets do not need the hex information](images/wide_network.png)
+
+We can see `occurrences_weather_hexes` is less of a chokepoint, and that the modeling branch of the pipeline no longer depends on the spatial indices.
+
+# Review
+
+When working with targets `{targets}` you have a new criteria to optimise for: minimise the target dependencies.
+
+  - 'Widening' your process will lower overall total running time, since you can make best re-use of work saved in the store.
+  - Using this strategy some things that were annoyingly slow in a linear pipeline are less important to optimise.
+    - Code might be slow, but it hardly ever runs!
+    - For `{tidyverse}` users `{targets}` enables you to 'have your cake and eat it too'.
+      - E.g. Why bother with `data.table` for code that hardly ever runs?
