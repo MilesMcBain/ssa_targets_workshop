@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Working Smarter with {targets}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./branching.html">Divide and conquer with branching</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Working Smarter with {targets}</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Working Smarter With {targets}</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./typical_R_projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Strengths and weaknesses of typical R project workflows</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pure_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pure Functions as units of work</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./targets_plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The {targets} plan</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./debugging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Debugging {targets} with new access panels</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./branching.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Divide and conquer with branching</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./long_vs_wide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Long vs Wide processes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./getting_help.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting Help</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">More</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./end.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The End</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="divide-and-conquer-with-branching" class="level1">
+<h1>Divide and conquer with branching</h1>
+<p>The largest chunk of work in our project is our model fitting and the associated grid search. When scaling up these kinds of processes to larger data and larger grids you typically hit some stumbling blocks.</p>
+<p>For example:</p>
+<ul>
+<li>You ‘add more cores’, or utilise more parallel threads, but then you unexpectedly run out of memory.</li>
+<li>You get iterations that have model convergence problems due a bad combinations of hyper parameters.</li>
+<li>A colleague suggests you need to expand you hyper-parameter search.</li>
+</ul>
+<p>These types of things are frustrating because the problem might not appear until hours into a very long running process, and the intermediate result of all of those hours is immediately dumped.</p>
+<p>With <code>{targets}</code> we can use a technique called ‘dynamic branching’ to promote every iteration in a set to its own target.</p>
+<ul>
+<li>Each result is individually cached, which means large iterative processes are now resumable.</li>
+<li>We can also add or remove iterations by changing input data, while reusing the results from previous iterations.</li>
+<li>We can take advantage of <code>{targets}</code> parallelism features to run the iterations in parallel.</li>
+</ul>
+<p>We’ll refactor the model grid search in our project to use this approach. After we see how it works it’s going to be a little easier to explain why it is called ‘dynamic branching’.</p>
+</section>
+<section id="dynamic-branching-refactor-steps" class="level1">
+<h1>Dynamic branching refactor steps:</h1>
+<p>In the process of this refactor we’re going to remove our training grid. If you recall it was a dataframe with one row per combination of training fold and model hyper parameters:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  occurrence_cv_splits <span class="ot">&lt;-</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">vfold_cv</span>(training_data, <span class="at">v =</span> <span class="dv">5</span>, <span class="at">repeats =</span> <span class="dv">1</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  training_grid <span class="ot">&lt;-</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">expand.grid</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">fold_id =</span> occurrence_cv_splits<span class="sc">$</span>id,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">mtry =</span> mtry_candidates,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">num_trees =</span> num_trees_candidates</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      occurrence_cv_splits,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="fu">c</span>(<span class="at">fold_id =</span> <span class="st">"id"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  training_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This refactor will give <code>{targets}</code> the job of materialising the grid, with one target per combination of parameters and data (row).</p>
+<ol type="1">
+<li>Create a new target that summarises the grid training results:</li>
+</ol>
+<ul>
+<li>This code remains unchanged.</li>
+</ul>
+<p>i.e put this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  summarised_training_results <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    training_results <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean_auc =</span> <span class="fu">mean</span>(auc),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd_auc =</span> <span class="fu">sd</span>(auc),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean_accuracy =</span> <span class="fu">mean</span>(accuracy),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd_accuracy =</span> <span class="fu">sd</span>(accuracy),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">.by =</span> <span class="fu">c</span>(mtry, num_trees)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="sc">-</span>mean_auc)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  summarised_training_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>inside a new target:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    species_classification_model_training_summary,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise_species_model_training_results</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      species_classification_model_training_results</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  ),</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Promote <code>mtry_candidates</code> and <code>num_trees_candidates</code> to plan targets:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">tar_target</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    mtry_candidates,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    num_trees_candidates,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">100</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  ),</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>Make the cross validation fold dataset into a plan target:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    training_cross_validation_folds,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">vfold_cv</span>(<span class="fu">training</span>(test_train_split), <span class="at">v =</span> <span class="dv">5</span>, <span class="at">repeats =</span> <span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  ),</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>What’s left is to refactor the middle bit, actually fitting the models, ie. this code:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  training_results <span class="ot">&lt;-</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    training_grid <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pmap</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">.l =</span> <span class="fu">list</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>          training_grid<span class="sc">$</span>splits,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          training_grid<span class="sc">$</span>num_trees,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          training_grid<span class="sc">$</span>mtry</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">.f =</span> fit_fold_calc_results</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bind_rows</span>()</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># by returning a dataframe inside mutate, the resulting columns are appended to training_grid</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We change that into a new target that looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_target</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    species_classification_model_training_results,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit_fold_calc_results</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>      training_cross_validation_folds<span class="sc">$</span>splits[[<span class="dv">1</span>]],</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>      num_trees_candidates,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>      mtry_candidates</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="fu">cross</span>(training_cross_validation_folds, mtry_candidates, num_trees_candidates)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’re introducing a bit of magic here: <code>pattern = cross(training_cross_validation_folds, mtry_candidates, num_trees_candidates)</code>.</p>
+<p>This says to <code>{targets}</code>: We’re declaring a group of targets here, that you’re going to create for us. That group is defined by evaluating this target’s expression on a set of inputs, this case a cross product of input targets. If we call <code>tar_make()</code> at this point we get:</p>
+<pre><code>▶ dispatched branch species_classification_model_training_results_d19c364718f81c21
+Setting levels: control = 0, case = 1
+Setting direction: controls &lt; cases
+● completed branch species_classification_model_training_results_d19c364718f81c21 [0.051 seconds]
+▶ dispatched branch species_classification_model_training_results_bde0689544bd8cc7
+Setting levels: control = 0, case = 1
+Setting direction: controls &lt; cases
+● completed branch species_classification_model_training_results_bde0689544bd8cc7 [0.058 seconds]
+● completed pattern species_classification_model_training_results
+▶ dispatched target species_classification_model_training_summary
+✖ errored target species_classification_model_training_summary</code></pre>
+<p>If we look <code>tar_load(species_classification_model_training_results)</code> and interactively run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_species_model_training_results</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>      species_classification_model_training_results</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>we can see the problem more clearly:</p>
+<pre><code>Error in `summarise()` at R/summarise_species_model_training_results.R:12:3:
+! Can't select columns that don't exist.
+✖ Column `mtry` doesn't exist.
+Run `rlang::last_trace()` to see where the error occurred.</code></pre>
+<p>This is happening because <code>species_classification_model_training_results</code> no longer has columns <code>mtry</code> and <code>num_trees</code>. These were being included in the data because of the way we were calling mutate in our earlier grid search code.</p>
+<p>To fix this we can modify the object returned by <code>fit_fold_calc_results()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use auc and accuracy as our summary statistics</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">auc =</span> <span class="fu">auc</span>(roc_object) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>(),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">accuracy =</span> <span class="fu">sum</span>(test_set<span class="sc">$</span>is_moluccus <span class="sc">&gt;</span> <span class="fl">0.5</span> <span class="sc">&amp;</span> test_set<span class="sc">$</span>is_moluccus <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="fu">nrow</span>(test_set),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> mtry,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_trees =</span> num_trees</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And now <code>tar_make()</code> should succeed!</p>
+<ol start="4" type="1">
+<li>Put <code>fit_fold_calc_results()</code> in <code>R/fit_fold_calc_results.R</code></li>
+</ol>
+<ul>
+<li>Since the file name where it is no longer reflects what’s in there.</li>
+<li>Can delete old file.</li>
+</ul>
+<p>We successfully refactored to ‘dynamic branching’. We shall see in a moment all that we have bought with that. But first…</p>
+<section id="why-its-called-dynamic-branching" class="level3">
+<h3 class="anchored" data-anchor-id="why-its-called-dynamic-branching">Why it’s called ‘Dynamic Branching’…</h3>
+<p>‘Branching’ is a reference to the tree-like appearance of pipeline graphs.</p>
+<p><code>{targets}</code> has a number of ways to add targets to the graph programatically. In our case we instructed <code>{targets}</code> to add a training target to our graph for each combination of model parameters and training data. After being computed those targets are immediately consolidated into into the dataset <code>species_classification_model_training_results</code> which we then summarised.</p>
+<p>We do not need to immediately consolidate the dynamically generated targets though. We could for example create a new target from each of our dynamically generated targets which if you recall are 1 row dataframes. See <code>fit_fold_calc_results()</code>.</p>
+<p>This would look like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_target</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  new_dynamic_target,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">a_function</span>(species_classification_model_training_results),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="fu">map</span>(species_classification_model_training_results)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We again use <code>pattern</code> to express this, but this time with <code>map</code> we’re expressing a 1:1 transformation of the input targets, instead of a cross product.</p>
+<p>Our pipeline graph is having ‘branches’ extended, so that you can imagine looks like:</p>
+<pre><code> species_classification_model_training_results_a - new_dynamic_target_a  \
+/
+- species_classification_model_training_results_b - new_dynamic_target_b -  final_summary
+\
+ species_classification_model_training_results_c - new_dynamic_target_c  /</code></pre>
+<p>These branches can be chains of targets that continue on, perhaps even splitting into even more branches themselves before being finally consolidated into an collection like a list, dataframe, or vector.</p>
+<p>The analogy of ‘branches’ fits this idea of splitting and potentially growing and splitting further.</p>
+<p>‘Dynamic’ comes from the fact that there are actually two ways to do branching in <code>{targets}</code>.</p>
+<ul>
+<li>‘Dynamic branching’ where <code>{targets}</code> generates branches for you at run time, when all the target’s dependencies are computed. The reason this is important is that it may not be known how many items a list/vector/dataframe target contains, and thus how many branches <code>{targets}</code> would need to create.</li>
+<li>‘Static branching’ where the the exact number of branches that need to be created is known based on fixed inputs in the plan. For example we might have been able to use this to create a branch for each statically known combination of parameters in our grid search.</li>
+</ul>
+<p>Static Branching was developed first, and is largely superseded by Dynamic Branching. There is little reason to prefer the static mode.</p>
+</section>
+</section>
+<section id="the-proof-in-the-pudding" class="level1">
+<h1>The Proof in the pudding</h1>
+<section id="reusing-existing-grid-search-points" class="level2">
+<h2 class="anchored" data-anchor-id="reusing-existing-grid-search-points">Reusing existing grid search points</h2>
+<p>No here’s where if you do a bit of modeling, <code>{targets}</code> should get really exciting.</p>
+<p>First let’s explore what happens if we expand the grid search, e.g.&nbsp;by trying a model version with 1000 trees:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_target</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    num_trees_candidates,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">100</span>, <span class="dv">1000</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  ),</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>running <code>tar_make()</code> gives:</p>
+<pre><code>...
+✔ skipped branch species_classification_model_training_results_d15e5fdbcf21af3b
+✔ skipped branch species_classification_model_training_results_d19c364718f81c21
+✔ skipped branch species_classification_model_training_results_bde0689544bd8cc7
+▶ dispatched branch species_classification_model_training_results_e8827b8265f7d539
+Setting levels: control = 0, case = 1
+Setting direction: controls &lt; cases
+● completed branch species_classification_model_training_results_e8827b8265f7d539 [0.043 seconds]
+● completed pattern species_classification_model_training_results
+▶ dispatched target species_classification_model_training_summary
+● completed target species_classification_model_training_summary [0.009 seconds]
+▶ dispatched target species_classification_model
+● completed target species_classification_model [0.049 seconds]
+▶ dispatched target species_model_validation_data
+● completed target species_model_validation_data [0.014 seconds]
+✔ skipped target base_plot_model_roc_object
+✔ skipped target gg_species_class_accuracy_hexes
+▶ dispatched target report
+● completed target report [3.984 seconds]
+▶ ended pipeline [5.811 seconds]</code></pre>
+<p>We can see that:</p>
+<ul>
+<li>We skipped a lot of branches in calculating <code>species_classification_model_training_results</code>
+<ul>
+<li>We only calculated new combinations in our training grid with <code>num_trees = 1000</code>
+<ul>
+<li>3 x 15 x 1 of these</li>
+</ul></li>
+</ul></li>
+<li><code>species_classification_model_training_summary</code> changed and since it is an input to <code>species_classification_model</code> the model was refit.</li>
+<li>BUT it turned out that the best model remained the same. So we did not rebuild:
+<ul>
+<li><code>base_plot_model_roc_object</code></li>
+<li><code>gg_species_class_accuracy_hexes</code></li>
+</ul></li>
+<li>Question: How could we refactor the plan if we wanted to make it so that if the best model didn’t change we would not refit final model?</li>
+<li><details>
+<summary>
+Refactoring ideas
+</summary></details></li>
+<li>We could make a separate target which is just the first row of <code>species_classification_model_training_summary</code>, which represents the best model.</li>
+<li>The final model would only be refit if this changes.
+</li>
+</ul>
+<section id="remember-workspaces" class="level3">
+<h3 class="anchored" data-anchor-id="remember-workspaces">Remember workspaces?</h3>
+<p>Initially when I made this refactor I made this mistake:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_target</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    species_classification_model_training_results,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fit_fold_calc_results</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      training_cross_validation_folds<span class="sc">$</span>splits,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      mtry_candidates,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      num_trees_candidates</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="fu">cross</span>(training_cross_validation_folds, mtry_candidates, num_trees_candidates)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Forgetting that <code>splits</code> was a list column, and so the dataset I want will have an extra layer of list wrapping that needs to be stripped off.</p>
+<p>The error this generated is hard to debug:</p>
+<pre><code>▶ dispatched target training_cross_validation_folds
+● completed target training_cross_validation_folds [0.007 seconds]
+▶ dispatched branch species_classification_model_training_results_2f9ab41c1360f0ce
+✖ errored branch species_classification_model_training_results_2f9ab41c1360f0ce
+✖ errored pipeline [9.093 seconds]
+Error:
+! Error running targets::tar_make()
+Error messages: targets::tar_meta(fields = error, complete_only = TRUE)
+Debugging guide: https://books.ropensci.org/targets/debugging.html
+How to ask for help: https://books.ropensci.org/targets/help.html
+Last error message:
+    No method for objects of class: list
+Last error trace back:
+    fit_fold_calc_results(training_cross_validation_folds$splits,      mtry_...</code></pre>
+<p>Partly because the inputs to <code>species_classification_model_training_results_2f9ab41c1360f0ce</code> are not known exactly. They could be any combination of elements from <code>training_cross_validation_folds</code>, <code>mtry_candidates</code>, and <code>num_trees_candidates</code>. So what would we <code>tar_load()</code> to test the problem interactively?</p>
+<p>This is the situation we discussed earlier in the context of workspaces. To debug we set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar_option_set</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">2048</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">workspace_on_error =</span> <span class="cn">TRUE</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>It’s actually not a bad idea to turn this on defensively when working with dynamic branches.</li>
+</ul>
+<p>An run <code>tar_make()</code>:</p>
+<pre><code>▶ dispatched branch species_classification_model_training_results_2f9ab41c1360f0ce
+▶ recorded workspace species_classification_model_training_results_2f9ab41c1360f0ce
+✖ errored branch species_classification_model_training_results_2f9ab41c1360f0ce
+✖ errored pipeline [0.349 seconds]</code></pre>
+<p>and then <code>tar_workspace(species_classification_model_training_results_2f9ab41c1360f0ce)</code>.</p>
+<p>We can now observe that the data object we pass to the fitting function for this branch is:</p>
+<pre><code>&gt; training_cross_validation_folds$splits
+[[1]]
+&lt;Analysis/Assess/Total&gt;
+&lt;5910/1478/7388&gt;</code></pre>
+<p>Inside a length 1 list. So when we try to run <code>training()</code> on it inside <code>fit_fold_calc_results()</code> we get this error:</p>
+<pre><code>&gt; training(training_cross_validation_folds$splits)
+Error in `training()`:
+! No method for objects of class: list
+Run `rlang::last_trace()` to see where the error occurred.</code></pre>
+<p>So the quick fix is the <code>[[1]]</code> I added.</p>
+</section>
+</section>
+<section id="converting-to-parallel" class="level2">
+<h2 class="anchored" data-anchor-id="converting-to-parallel">Converting to parallel</h2>
+<p>BUT WAIT THERE’S MORE:</p>
+<p>Things run pretty fast now. But what if we wanted to speed things up by making more cores available to run model fits in parallel?</p>
+<p>We add <code>library(crew)</code> to our packages and then set our options like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_option_set</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">2048</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">controller =</span> <span class="fu">crew_controller_local</span>(<span class="at">workers =</span> <span class="dv">2</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s blow away our targets store with <code>tar_destroy()</code>, and then run <code>tar_make()</code> to see:</p>
+<p>An error!</p>
+<pre><code>✖ errored target occurrences
+✖ errored pipeline [3.665 seconds]
+Error:
+! Error running targets::tar_make()
+Error messages: targets::tar_meta(fields = error, complete_only = TRUE)
+Debugging guide: https://books.ropensci.org/targets/debugging.html
+How to ask for help: https://books.ropensci.org/targets/help.html
+Last error message:
+    [conflicted] filter found in 2 packages.
+Either pick the one you want with `::`:
+• dplyr::filter
+• stats::filter
+Or declare a preference with `conflicts_prefer()`:
+• `conflicts_prefer(dplyr::filter)`
+• `conflicts_prefer(stats::filter)`</code></pre>
+<p>What gives! We called <code>conflicts_prefer</code> at the start of our <code>_targets.R</code>.</p>
+<p>So in many cases of your <code>{targets}</code> plan can be made parallel with just that one config change. Unfortunately in our case there is a small issue:</p>
+<ul>
+<li>The environment we create in <code>_targets.R</code> is copied to the worker threads that will run targets in parallel</li>
+<li><code>{targets}</code> Doesn’t reach into package namespaces and copy their internal state. That’s a can of worms!</li>
+<li>So any package that uses internal state its own namespace for its functionality could have problems when that state is not replicated to workers.</li>
+<li>This also a problem of calling impure functions!</li>
+</ul>
+<p>We have two packages that utilise internal state in their namespaces:</p>
+<ul>
+<li><code>{conflicted}</code> for the conflict resolution data</li>
+<li><code>{galah}</code> for its credentials</li>
+</ul>
+<section id="hooks-to-the-rescue" class="level3">
+<h3 class="anchored" data-anchor-id="hooks-to-the-rescue">Hooks to the rescue</h3>
+<p>Luckily this gives us a really good motivating case for something <code>{targets}</code> calls ‘hooks’. Hooks are ways to modify the target definitions in our plan after we have defined them. We have at our disposal:</p>
+<ul>
+<li><code>tar_hook_before()</code>: code to evaluate before a target is built</li>
+<li><code>tar_hook_inner()</code>: code to wrap around a target any time it appears as a dependency for another target (i.e.&nbsp;in input position)</li>
+<li><code>tar_hook_outer()</code>: code to wrap around a target after it is built, but before it is saved to the store.</li>
+</ul>
+<p>In our case we can append <code>tar_hook_before()</code> to the end of our <code>list()</code> of target definitions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># inside list of targets</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_hook_before</span>(</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">hook =</span> {</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">conflicts_prefer</span>(</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span>filter,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">galah_config</span>(</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">atlas =</span> <span class="st">"ALA"</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">email =</span> <span class="fu">Sys.getenv</span>(<span class="st">"ALA_EMAIL"</span>) <span class="co"># You can replace this with your email to run. But you might not want to commit it to a public repository!</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hooks can be targeted toward specific targets using the <code>names</code>. A classic use is to strip back <code>{ggplot2}</code> objects before they are saved to the store, since they can hold onto a reference to a large dataset. E.g.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># inside list of targets</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tar_hook_outer</span>(</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">hook =</span> <span class="fu">lighten_ggplot</span>(.x), <span class="co"># .x is a placeholder we use for the target output</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">starts_with</span>(<span class="st">"gg"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will postprocess any targets that start their name with “gg”.</p>
+</section>
+<section id="parallel-finally" class="level3">
+<h3 class="anchored" data-anchor-id="parallel-finally">Parallel, finally</h3>
+<p>With the hook in place, we can now build our pipeline in parallel. Exactly how that is done we leave to <code>{targets}</code> and the parallel backend in <code>{crew}</code>. Targets that are not dependent on each other are fair game to run in parallel.</p>
+<p>Targets supports other parallel backends from packages <code>{clustermq}</code> and <code>{future}</code>.</p>
+<p>One thing that commonly crops up running in parallel is that the increased memory pressure can cause out of memory errors. Luckily with <code>{targets}</code>, we don’t lose work. If you were working on AWS you could change your instance config for more RAM and resume processing.</p>
+<p>There are helpful options for dealing with resource usage, for example:</p>
+<ul>
+<li><code>tar_option_set(memory = "transient")</code> can force targets to be dropped from memory after they’re stored. Under defaults targets can stick around in workers memory. It’s slower to use this but it lowers peak memory usage.</li>
+<li>Also see <code>storage = "worker</code> option which can control if the result needs to be copied back to main thread or not.</li>
+<li>We can also use the <code>deployment</code> option to specify only certain targets go to workers, and the rest get processed in the main thread that runs our plan.</li>
+</ul>
+<p>You don’t need to remember these.</p>
+<ul>
+<li>You can find them in the help for <code>tar_option_set()</code>.</li>
+<li>They can all be set globally or at an individual target level</li>
+<li>These and other options give you valuable control of ‘shape’ of your pipeline’s process.</li>
+<li>Just remember they exist if you run into resource usage problems.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="dynamic-branching-refactor" class="level1">
+<h1>Dynamic Branching refactor</h1>
+<p>The completed refactor for this section is available on <a href="https://github.com/MilesMcBain/classic_r_project/tree/refactor3">this branch of the example project</a>.</p>
+</section>
+<section id="review" class="level1">
+<h1>Review</h1>
+<ul>
+<li>Dynamic branching lets us dynamically create targets
+<ul>
+<li>These targets can represent iterations over other targets</li>
+<li>Makes iterations resumable</li>
+<li>Makes iterations parallelisable</li>
+<li>Can add iterations as inputs are updated, but keep prior work</li>
+<li>There are two important arguments for this.
+<ul>
+<li>We discussed <code>pattern</code> (with <code>map</code> and <code>cross</code>). There are other patterns available.</li>
+<li>the <code>iteration</code> argument is also useful, but not covered here.</li>
+</ul></li>
+</ul></li>
+<li>Hooks are useful for changing selections of targets after we have defined them
+<ul>
+<li>We can apply pre / post processing steps or do setup work.</li>
+</ul></li>
+<li><code>{targets}</code> has options for controlling resource usage.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

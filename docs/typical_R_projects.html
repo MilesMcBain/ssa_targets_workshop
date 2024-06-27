@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Working Smarter with {targets} - Strengths and weaknesses of typical R project workflows</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./typical_R_projects.html">Strengths and weaknesses of typical R project workflows</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Working Smarter with {targets}</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Working Smarter With {targets}</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./typical_R_projects.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Strengths and weaknesses of typical R project workflows</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pure_functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pure Functions as units of work</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./targets_plan.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The {targets} plan</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./debugging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Debugging {targets} with new access panels</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./branching.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Divide and conquer with branching</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./long_vs_wide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Long vs Wide processes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./getting_help.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting Help</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./more.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">More</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./end.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The End</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Strengths and weaknesses of typical R project workflows</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="concept-data-analysis-pipelines" class="level1">
+<h1>Concept: Data Analysis Pipelines</h1>
+<ul>
+<li>Data goes in, answers, insights, all the magic comes out.</li>
+<li>‘Pipeline’ implies a process which is a kind of linear progression from inputs to outputs.</li>
+<li>Contrast this with a process that looks more like a continuous loop, where the aim is to receive input data, react to it, and then rest waiting for the next piece of data.
+<ul>
+<li>E.g. a software Application</li>
+</ul></li>
+<li>The linear aspect is often reflected in how we structure our data analysis projects.</li>
+</ul>
+</section>
+<section id="concept-reproducible-data-analysis" class="level1">
+<h1>Concept: Reproducible Data Analysis</h1>
+<ul>
+<li>The ‘reproducibility’ that is connected to data analysis pipeline tools is not the ‘replicability’ from the replication crisis in science. But the two are connected.</li>
+<li>We can ‘reproduce’:
+<ul>
+<li>The same conclusion given the same input data, and following the same analysis process.
+<ul>
+<li>e.g.&nbsp;your colleague’s work on your computer</li>
+</ul></li>
+<li>A valid analysis given different input data, and following the same analysis process.
+<ul>
+<li>Conclusion might be different</li>
+</ul></li>
+</ul></li>
+<li>What are the reasons we might want to do this?
+<details>
+<summary>
+Benefits of reproducibility?
+</summary>
+<ul>
+<li>In order to answer questions about, or make extensions to an analysis in the future
+<ul>
+<li>‘Boomerang effect’</li>
+<li>To be able to make realistic predictions about how long a data analysis will take</li>
+<li>To ensure consistent conclusions are reached to related questions
+<ul>
+<li>Need consistent definitions for inputs and key metrics</li>
+</ul></li>
+<li>In a nutshell: Reliability, Consistency
+<ul>
+<li>Without these you don’t have a viable data analysis capability</li>
+</ul></li>
+</ul></li>
+</ul>
+</details></li>
+</ul>
+</section>
+<section id="reproducibility-and-code" class="level1">
+<h1>Reproducibility and Code</h1>
+<ul>
+<li>Code works in favour of reproducibility.
+<ul>
+<li>It’s not guaranteed, but well written code can produce a deterministic procedure for data analysis. Use the same dataset with the same code and you should reproduce the same answer.</li>
+</ul></li>
+<li>In an ideal world every data analysis could be a single succinct script of beautifully aesthetic code, easily understood by humans and machines alike.
+<ul>
+<li>In practice this is rarely possible due to certain forces. What are those forces?
+<details>
+<summary>
+Forces pulling apart that perfect script
+</summary>
+<ul>
+<li>Domain mismatch: need write a lot of code</li>
+<li>External systems: need to tread lightly on them</li>
+<li>Expensive computations: repeatedly performing them is infeasible</li>
+<li>Division of labour</li>
+<li>(?)</li>
+</ul>
+</details></li>
+</ul></li>
+</ul>
+</section>
+<section id="classic-approaches-to-r-projects" class="level1">
+<h1>Classic approaches to R projects</h1>
+<section id="script-per-pipeline-stage" class="level2">
+<h2 class="anchored" data-anchor-id="script-per-pipeline-stage">Script per pipeline ‘stage’</h2>
+<p>The most common approach to balancing reproducibility versus other concerns is to break the pipeline up into discrete scripts that map to stages in the linear pipeline. These stages might be conceived of as something like:</p>
+<ol type="1">
+<li>Acquire data</li>
+<li>Wrangle data</li>
+<li>Visualise data</li>
+<li>Model data</li>
+<li>Present findings</li>
+</ol>
+<p>With variations as required by context.</p>
+<p>A typical folder structure might look something like:</p>
+<pre><code> .
+├── data
+│&nbsp;&nbsp; ├── processed_data.Rds
+│&nbsp;&nbsp; └── raw_data.csv
+├── doc
+│&nbsp;&nbsp; ├── exploratory_analysis.Rmd
+│   └── report.Rmd
+├── output
+│   ├── insightful_plot.png
+│&nbsp;&nbsp; └── final_model.Rds
+├── R
+│&nbsp;&nbsp; └── helpers.R
+├── README.md
+├── run.sh
+└── scripts
+    ├── 01_load_data.R
+    ├── 02_wrangle_data.R
+    ├── 03_visualise_data.R
+    ├── 04_model_data.R
+    └── 05_render_report.R
+</code></pre>
+<p>There’s a lot of variations on this idea. There might be multiple scripts per phase here, e.g.&nbsp;one per plot (figure)03_visualise_data.R, or one per model. Using more folders seems popular.</p>
+<p>The key element is that the data analysis is broken down into a series of stages, each of which is captured by a single script file. Quite often these script files are numbered, with it to be implicitly understood that the the correct way to run the pipeline is to run the scripts in numerical order<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>If the author is diligent the <code>README.md</code> will contain information about how to run the pipeline, and may provide some kind of <code>run.R</code> or <code>run.sh</code> script which acts as the ‘entry-point’ for kicking off pipeline execution. This is intended to be the thing that you run to reproduce the author’s results.</p>
+This can be something of a trap because the author likely does not actually use the <code>run.sh</code> script as part of their workflow. - Why would this be so?
+<details>
+<summary>
+reasons for not using the ‘run everything’ entry-point.
+</summary>
+<ul>
+<li>Author likely taking advantage of R’s REPL for interactive development. Relies on operating on incomplete pipeline state.
+<ul>
+<li>Running whole pipeline is too slow. Author can’t iterate fast enough if they have to re-run all earlier stages just to make small tweaks to a later stage. E.g. playing with plot presentation</li>
+<li>Running whole pipeline would have undesirable side-effects like pulling a large amount of data from an API.</li>
+</ul>
+</li></ul></details>
+
+<p>So the workflow used in practice tends be some combination of: - Interactively run numbered scripts up to the one you want to work on, then manually step through code to create the prerequisite state in the global environment. - Shortcut the early stages of the pipeline by having them write intermediate output files that are read as inputs to later stages. Stages can be worked on independently.</p>
+<section id="when-things-go-stale" class="level3">
+<h3 class="anchored" data-anchor-id="when-things-go-stale">When things go stale</h3>
+<p>It’s the real, yet informal, workflow that creates problems.</p>
+<p>If we used this project structure, and always ran the pipeline from start to finish, we would always know whether our code was in a state consistent with valid outputs <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>If we work interactively, as we inevitably will<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, we create opportunities for the pipeline’s code and outputs (be they intermediate or final) to be in conflict. Here’s a few a examples:</p>
+<ol type="1">
+<li><p>Changes are made to <code>02_wrangle_data.R</code> to support better modeling in <code>04_model_data.R</code>. We were so keen to write about the improved results, we forgot to re-run <code>03_visualise_data.R</code> which also outputs some image files that are used in the <code>report.Rmd</code>. When we render <code>report.Rmd</code> it contains images with data that was dropped before running the new model, and our boss is confused as to why we didn’t remove them yet. We look silly.</p></li>
+<li><p>In the midst of running <code>04_model_data.R</code> interactively we forget that creating a <code>|&gt;</code> chain of <code>data.table</code> transformations can modify the head dataset in-place. We tweak a chain before running it again leading to some columns being transformed twice. When we run the modeling code to completion we get some unexpectedly good results, and save that model for later use in <code>report.Rmd</code>. We write the report out around these results, only to have everything sour at the last minute when we try to run the entire pipeline as one with <code>run.sh</code> and a completely different set of results appears.</p></li>
+</ol>
+<p>Both of these examples are different aspects of the same core problem. Working interactively with code that can accumulate data i.e.&nbsp;files on disk, data.frames in the global environment, rows in a database, etc. creates the opportunity for the code and the accumulated data to be in an inconsistent state. Sometimes this accumulated data is itself referred to as ‘global state’ or simply ‘state’, and people might say our problem was caused by ‘stale state’, that is: we are working with data that is no longer representative of what our program would output, if we ran it from scratch.</p>
+</section>
+<section id="cycles-vs-lines" class="level3">
+<h3 class="anchored" data-anchor-id="cycles-vs-lines">Cycles vs Lines</h3>
+<ul>
+<li>The project structure is strongly linear: Each script is assumed to be fully dependent on those prior, just as each line of code is on the one before.</li>
+<li>Our work pattern is strongly cyclic as we iteratively refine our reasoning, statistical methods, data visualisations etc. This is involves making smaller targeted changes to code at all stages of the pipeline.</li>
+</ul>
+<p>There are forces that we have discussed that exert pressure to avoid running the pipeline in a linear fashion. This creates space for issues:</p>
+<ul>
+<li>The pipeline either fails to run, or gives unexpected results when finally run in a complete pass. Reproducibility fail.
+<ul>
+<li>Concepts drift between script files as they are worked on piecemeal. E.g. the same dataset is loaded in multiple script files but referred to by different names. Coherency fail.</li>
+</ul></li>
+</ul>
+<p>As we will see <code>{targets}</code> will remove the pressure to run the entire pipeline end to end, and allow us to work iteratively without the risk of these problems, perhaps faster than ever before.</p>
+</section>
+</section>
+<section id="rmd-quarto-monolith" class="level2">
+<h2 class="anchored" data-anchor-id="rmd-quarto-monolith">Rmd / Quarto Monolith</h2>
+<p>The idea of keeping code and output synchronised is often introduced to motivate the use of <em>literate programming</em> tools like Rmarkdown or Quarto. They definitely have something to contribute here, these tools work very well for educational material (like this workshop!), but the format does not scale well to large and complex data science projects.</p>
+<p>There are two main difficulties:</p>
+<ol type="1">
+<li><p>Fundamentally the format is geared toward producing a single output which is a text of some kind. Complex data science projects often have a myriad of other outputs including models, datasets, and other documents. Possibly having your model run binned because <code>pandoc</code> balked at your markdown syntax is not sensible.</p>
+<p>Rmarkdown and Quarto offer a caching feature to try to mitigate this but it involves manual cache management, and does not give you control over serialisation formats which mean certain objects will be unable to be restored from cache correctly. It’s up to you to discover which.</p></li>
+<li><p>In projects that involve complex data wrangling or modeling a tension can develop between the text and the code, where the code needs to be complex, but the text is pitched at a different (usually higher) conceptual level. The two fight for the narrative thread, and make for a disjointed / confusing reading experience. I call this <em>illiterate programming</em>.</p></li>
+</ol>
+<p>My advice is definitely do use Rmarkdown or Quarto, but avoid shoehorning an entire pipeline into the document. Have a pipeline produce the intermediate outputs separately which are then read into the document generation pipeline and given superficial coding treatment e.g.&nbsp;light wrangling into presentation layer plots or tables.</p>
+</section>
+</section>
+<section id="introducing-our-project-v1-classic-r-project" class="level1">
+<h1>Introducing our project V1: ‘Classic R Project’</h1>
+<p>In this workshop we’re going to refactor <a href="https://github.com/MilesMcBain/classic_r_project">this project</a> into a {targets} pipeline.</p>
+<p>Nominally the project is about fetching some species distribution data from an API, merging that with some weather data, training a species classification model, and producing a report.</p>
+<ul>
+<li>Take a few minutes to poke around</li>
+<li>Read script 01 and 02.
+<ul>
+<li>Is it clear why things in 02 are the way they are?
+<ul>
+<li>Is it clear why we do that H3 hex index thing?</li>
+<li>Has anyone looked at real estate recently. Which gives you more context: clicking through all the beautiful images, or one look at the floor plan?</li>
+<li>Or imagine reading a text book that had no table of contents?</li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Occasionally this presents refactoring challenges, where a new stage needs to be added late in development and the author might roll with a <code>02b_</code> to save updating too many paths.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Or would we? How do we decide what valid outputs are? More on this later.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Probably one of the reasons you’re using R is the gloriously fluent conversations you can have with your data via the REPL. Working with rapid feedback when you need to simultaneously learn about data and program around it just feels way too good compared to the alternative where you have to wait for a heavy process to spool up and to run each time you have a simple question.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
