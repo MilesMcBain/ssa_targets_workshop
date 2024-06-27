@@ -1,0 +1,10 @@
+# MORE
+
+Some additional topics. No content here but happy to discuss if there's time:
+
+  - Meta programming with `{targets}`.
+    - You can create 'target factories': targets that generate more than one target in your plan.
+    - These are away to build domain specific abstractions into our plans
+    - See: https://wlandau.github.io/targetopia/contributing.html
+
+
