@@ -5,8 +5,10 @@ As discussed in the last section, refactoring our project into a collection of f
 It's time we actually defined what a {targets} plan is. This can be a little confusing because there are two things that users might refer to as the 'plan':
 
 1. A script file, by convention called `_targets.R`, that sits in the root folder of the project.
+
   - Sets up environment for the project's targets. Loads packages, sources script files containing functions to be called. Sets global state: options, environment variables etc.
   - Returns, as its last object, a list of target objects.
+
 2. The list of target objects itself. This data structure is what is analysed to determine the dependency structure of the pipeline graph.
 
 So in classic R fashion, the definition of the computational graph is itself a
@@ -27,7 +29,9 @@ Let's jump into refactoring our `run.R` into a {targets} plan.
 
 1. rename `run.R` to `_targets.R`
 2. add `library(targets)` and `library(tarcheypes)` to libraries
+
   - `{tarchetypes}` is discussed in the next section
+
 3. replace `set.seed(2048)` with `tar_option_set(seed = 2048)`
 4. Refactor paths bindings of data files like:
 
@@ -63,6 +67,7 @@ tar_target(
 ```
 
 6. Wrap all the output bindings and their function calls in a `list()`
+
   - make sure there's a comma separating each
 
 7. Replace `render("docs/report.Rmd")` with
