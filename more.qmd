@@ -5,10 +5,10 @@ Some additional topics. No content here but happy to discuss if there's time:
   - Meta programming with `{targets}`.
     - You can create 'target factories': targets that generate more than one target in your plan.
     - These are away to build domain specific abstractions into our plans
-    - See: [](https://wlandau.github.io/targetopia/contributing.html)
+    - See: [wlandau.github.io/targetopia/contributing.html](https://wlandau.github.io/targetopia/contributing.html)
 
   - For large projects `{targets}` supports having muliple plans.
     - I use this a fair bit, and it works well for projects that have separate phases.
     - E.g. maybe there's a phase where you're building a model, and then there's a later phase after it's been 'in production' where you analayse the performance. These could be separate plans in the one project.
     - Be careful about using it to break up a pipeline such that you revert to the classic 'script per pipeline stage' form.
-    - See: [](https://books.ropensci.org/targets/projects.html#multiple-projects)
+    - See: [books.ropensci.org/targets/projects.html#multiple-projects](https://books.ropensci.org/targets/projects.html#multiple-projects)
