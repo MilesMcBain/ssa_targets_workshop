@@ -81,4 +81,6 @@ https://auth.ala.org.au/userdetails/registration/createAccount
 
 You may also enjoy [creating keyboard shortcuts](https://docs.posit.co/ide/user/ide/guide/productivity/add-ins.html#keyboard-shortcuts) for these.
 
+# Content
 
+[](https://milesmcbain.github.io/ssa_targets_workshop/)
