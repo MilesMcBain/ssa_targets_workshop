@@ -238,4 +238,4 @@ When working with targets `{targets}` you have a new criteria to optimise for: m
   - Using this strategy some things that were annoyingly slow in a linear pipeline are less important to optimise.
     - Code might be slow, but it hardly ever runs!
     - For `{tidyverse}` users `{targets}` enables you to 'have your cake and eat it too'.
-      - E.g. Why bother with `data.table` for code that hardly ever runs?
+      - E.g. Why bother with faster packages with more difficult syntax for code that hardly ever runs?
