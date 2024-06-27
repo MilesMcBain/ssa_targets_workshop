@@ -1,5 +1,5 @@
 ---
-title: "{targets} workshop"
+title: "Working Smarter With {targets}"
 author: Miles McBain
 ---
 
@@ -7,7 +7,7 @@ author: Miles McBain
 
 The objective of this workshop is to change the way you work with R. Rather than
 sacrificing the fluidity and immediacy of R's REPL-based programming in the name
-of 'Reproducibility', we will find there is a middle way that lets us have both.
+of 'reproducibility', we will find there is a middle way that lets us have both.
 That way is the {targets} way.
 
 We start by setting some context:
@@ -53,4 +53,4 @@ The {targets} R package has cleared the high bar set by the [rOpenSci peer revie
 
 # Notation
 
-In this workshop material `{targets}` is used to refer to the R package, while target or targets (no braces) refers to a node in the pipeline graph. We say targets are 'built' to refer to executing the code associated with a target to generate its value. The value of target can be any R object. This is a notable differnce to make, where targets are files.
+In this workshop material `{targets}` is used to refer to the R package, while target or targets (no braces) refers to a node in the pipeline graph. We say targets are 'built' to refer to executing the code associated with a target to generate its value. The value of target can be any R object. This is a notable difference to make, where targets are files.

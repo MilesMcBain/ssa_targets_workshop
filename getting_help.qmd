@@ -1,4 +1,6 @@
-# Things that can go wrong
+# Getting Help
+
+## Things that can go wrong
 
 As you branch out and try to do more ambitious things with `{targets}` you will
 hit stumbling blocks. Where targets doesn't behave as you expect.
@@ -21,14 +23,14 @@ There are things that you likely want to do that aren't supported in `{targets}`
   than X days old. This feature does not exist explicitly in `{targets}` but is
   supported in `tarchetypes::tar_age()`.
 
-# Where to find help
+## Where to find help
 
 - The [discussions section of the {targets} GitHub repository](https://github.com/ropensci/targets/discussions) is a good place to ask questions about how to achieve something with `{targets}` or why it is not behaving as you expect.
   - Please avoid raising these as issues!
 - The rOpenSci slack has a dedicated channel to `{targets}`
 - The #rstats hashtag on Fosstodon / Mastodon is watched by a few `{targets}` enthusiasts.
 
-# Read The Fancy Manual
+## Read The Fancy Manual
 
 https://books.ropensci.org/targets/
 

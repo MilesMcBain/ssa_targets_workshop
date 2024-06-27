@@ -26,7 +26,7 @@ In a classic staged script workflow datasets goes through a very linear path.
   - Often the binding name is reused each time:
 
 ```{r}
-#|EFL: false
+#| eval: false
   the_dataset <-
     the_dataset |>
       mutate( # or join, summarise, rbind, cbind etc.
