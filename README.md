@@ -83,4 +83,4 @@ You may also enjoy [creating keyboard shortcuts](https://docs.posit.co/ide/user/
 
 # Content
 
-[](https://milesmcbain.github.io/ssa_targets_workshop/)
+https://milesmcbain.github.io/ssa_targets_workshop/
