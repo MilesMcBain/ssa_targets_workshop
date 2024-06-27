@@ -203,6 +203,11 @@ To fix this we can modify the object returned by `fit_fold_calc_results()`:
 
 And now `tar_make()` should succeed!
 
+4. Put `fit_fold_calc_results()` in `R/fit_fold_calc_results.R`
+
+  - Since the file name where it is no longer reflects what's in there.
+  - Can delete old file.
+
 We successfully refactored to 'dynamic branching'. We shall see in a moment all that we have bought with that. But first...
 
 ### Why it's called 'Dynamic Branching'...
