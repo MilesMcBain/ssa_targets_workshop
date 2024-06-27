@@ -234,7 +234,7 @@ We can see `occurrences_weather_hexes` is less of a chokepoint, and that the mod
 
 # Review
 
-When working with targets `{targets}` you have a new criteria to optimise for: minimise the target dependencies.
+When working with targets `{targets}` you have a new criteria to optimise for: minimise the target inter-dependencies.
 
   - 'Widening' your process will lower overall total running time, since you can make best re-use of work saved in the store.
   - Using this strategy some things that were annoyingly slow in a linear pipeline are less important to optimise.
