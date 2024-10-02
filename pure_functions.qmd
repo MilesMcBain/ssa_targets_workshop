@@ -37,7 +37,7 @@ operate_on_a_b(2, 2, \(x, y) union(x, y))
 
 ## Functions for the win*
 
-- *win = more maintainable, more easilty debuggable code
+- *win = more maintainable, more easily debuggable code
 - Question: Think about the worst code you've ever had to debug. What were its features? What made debugging it hard?
 - <details><summary> Debug-resistant code </summary>
   - Large amount of environment 'state' that is time consuming to set up to recreate bug
