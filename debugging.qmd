@@ -1,7 +1,7 @@
 # Debugging {targets} with new access panels
 
 In her highly recommended talk [**Object of type 'closure' is not subsettable**](https://www.youtube.com/watch?v=vgYS-F8opgE), Jenny Bryan discusses
-leaving yourself 'access panels', like options or arguments that turn on features that help your future self in debugging endeavours. As we shall see `{targets}` powerful new debugging access panels.
+leaving yourself 'access panels', like options or arguments that turn on features that help your future self in debugging endeavours. As we shall see `{targets}` has powerful new debugging access panels.
 
 First we look at how problems present and then we review a spectrum of increasingly powerful debugging techniques made available by `{targets}`
 
