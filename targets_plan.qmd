@@ -63,7 +63,7 @@ tar_target(
     arg2,
     arg3
   )
-),
+)
 ```
 
 6. Wrap all the output bindings and their function calls in a `list()`
