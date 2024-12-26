@@ -356,7 +356,7 @@ Hopefully you can see how the plan we have now defeats classes reproducibility i
   - Since `{targets}` intelligently caches our work, we can frequently run the pipeline with the same reproducibility guarantees as if we were running it from scratch, but take a fraction of the time.
     - Avoids the situation where the pipeline is rarely run end to end after small changes.
 
-There is a second kind or reproducibility supported by this workflow though.
+There is a second kind of reproducibility supported by this workflow though.
 I'll argue with `{targets}` we can more easily reproduce an understanding of
 what all this code is doing in someone else's head.
 
