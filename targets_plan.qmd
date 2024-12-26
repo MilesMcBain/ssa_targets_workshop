@@ -364,7 +364,7 @@ Imagine you are tasked with peer-reviewing a pipeline. If that pipeline is engin
 
   1. Run the full pipeline with `tar_make()`.
     - Barring issues with the package dependencies, the code just works! It has frequently been tested end-to-end.
-  2. You start your review form the `_targets.R` which gives you a nice overview of what the important bits of information the pipeline depends on are.
+  2. You start your review from the `_targets.R` which gives you a nice overview of what the important bits of information the pipeline depends on are.
     - You might even run `tar_visnetwork()` To get a feel for the most important chains of targets.
   3. When you decide you need to inspect the code for a target to understand it better, you can immediately:
     - `tar_load()` the input targets from the store, and execute a 'jump to definition' to go directly to the code where those targets are used. You can interactively play with the code until it makes sense.
